@@ -1,41 +1,41 @@
 ## [설계 구조]
 
-Model
- - MemoryManager
- class
-  Action
-  - Save
-  - SaveAll
-  - Load
-  - Clear
-  - Add
-  - Subtract
-  - history
-View 
- - MainWindow.xaml
-Controller
- - UIManager class
-   : Button,Text
- - ModificationManager class
-   Action
-   - Percent
-   - Delete
-   - DeleteAll
-   - Clear
+### [Model]
+MemoryManager  class
+  - Action
+    - Save
+    - SaveAll
+    - Load
+    -  Clear
+    - Add
+    -  Subtract
+    - history
+### [View] 
+MainWindow.xaml
+#### Controller
+UIManager class
+   - Button,Text
    
-   - Add
-   - Subtract
-   - Multiply
-   - Divide
-   - Result
+ModificationManager class
+-  Action
+    - Percent
+    -  Delete
+    - DeleteAll
+    - Clear
    
-   - DecimalPoint
-   - Mathematics (0~9)
-   - PlusOnMinus
+    - Add
+    - Subtract
+    - Multiply
+    - Divide
+    - Result
    
-   - Reciprocal
-   - SquareRoot
-   - Root
+    - DecimalPoint
+    - Mathematics (0~9)
+    - PlusOnMinus
+   
+    - Reciprocal
+    - SquareRoot
+    - Root
    
 ### [계산기 설계 ]
 
