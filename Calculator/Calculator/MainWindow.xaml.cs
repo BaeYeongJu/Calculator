@@ -28,7 +28,8 @@ namespace Calculator
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            MessageBox.Show($"{button.Name} Click");
+            if(button != null)
+                MessageBox.Show($"{button.Name} Click");
         }
     }
 }
