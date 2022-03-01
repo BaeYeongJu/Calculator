@@ -20,9 +20,12 @@ namespace Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private UIManager uiManager;
         public MainWindow()
         {
             InitializeComponent();
+            uiManager = new UIManager();
+            uiManager.Window = this;
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
