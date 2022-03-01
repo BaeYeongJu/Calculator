@@ -5,8 +5,8 @@ namespace Calculator
 {
     class UIManager
     {
-        private MemoryManager MemoryManager;
-        private ComputeManager ComputeManager;
+        private MemoryManager memoryManager;
+        private ComputeManager computeManager;
         public MainWindow Window { get; set; }
 
         private double currentValue = 0;
@@ -17,7 +17,7 @@ namespace Calculator
         public UIManager()
         {
             Trace.WriteLine("UIManager");
-            ComputeManager = new ComputeManager();
+            computeManager = new ComputeManager();
         }
 
         public void FunctionButtonClicked(string stringValue) 
@@ -49,6 +49,12 @@ namespace Calculator
                 isDecimalPoint = false;
                 beforeValue = currentValue;
                 currentValue = 0;
+                Trace.WriteLine($"+ before: {beforeValue} , current :{currentValue}");
+            }
+            else if(stringValue == "=")
+            {
+                isDecimalPoint = false;
+                computeManager.Result(beforeValue);
             }
         }
 
