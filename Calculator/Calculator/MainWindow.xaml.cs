@@ -31,5 +31,15 @@ namespace Calculator
             if(button != null)
                 MessageBox.Show($"{button.Name} Click");
         }
+
+        private void ButtonNumberClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+        }
+
+        public void SetOutputText(string data)
+        {
+            OutputText.Text = data;
+        }
     }
 }
