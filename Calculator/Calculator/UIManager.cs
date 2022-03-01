@@ -1,20 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-
+using System.Diagnostics;
 namespace Calculator
 {
     class UIManager
     {
+        private MemoryManager MemoryManager;
+        private ComputeManager ComputeManager;
+        public MainWindow Window { get; set; }
+
         private double currentValue = 0;
-        private int decimalPointcount = 0;
+        private double beforeValue = 0;
+        private int decimalPointcount = 1;
         private bool isDecimalPoint = false;
 
-        public double Input(int number)
+        public UIManager()
+        {
+            Trace.WriteLine("UIManager");
+            ComputeManager = new ComputeManager();
+        }
+
+        public void FunctionButtonClicked(string stringValue) 
+        {
+            if (stringValue == ".")
+            {
+                isDecimalPoint = true;
+            }
+            else if (stringValue == "/")
+            {
+                isDecimalPoint = false;
+                beforeValue = currentValue;
+                currentValue = 0;
+            }
+            else if (stringValue == "*")
+            {
+                isDecimalPoint = false;
+                beforeValue = currentValue;
+                currentValue = 0;
+            }
+            else if (stringValue == "-")
+            {
+                isDecimalPoint = false;
+                beforeValue = currentValue;
+                currentValue = 0;
+            }
+            else if (stringValue == "+")
+            {
+                isDecimalPoint = false;
+                beforeValue = currentValue;
+                currentValue = 0;
+            }
+        }
+
+        public void NumberButtonClicked(int number)
         {
             if (!isDecimalPoint)
             {
@@ -22,11 +60,13 @@ namespace Calculator
             }
             else
             {
-                currentValue = currentValue + Math.Pow(10,-1*decimalPointcount) * number;
+                currentValue = currentValue + Math.Pow(10, -1 * decimalPointcount) * number;
                 decimalPointcount++;
             }
 
-            return currentValue;
+            string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
+            Window.SetOutputText(string.Format(stringformat, currentValue));
+            
         }
     }
 }
