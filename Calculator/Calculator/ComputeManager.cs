@@ -16,8 +16,7 @@ namespace Calculator
         public double Subtract(double firstValue, double secondValue) { return firstValue - secondValue; }
         public double Multiply(double firstValue, double secondValue) { return firstValue * secondValue; }
         public double Divide(double firstValue, double secondValue) { return firstValue / secondValue; }
-        public void Result() { }
-
+        public double Result(double value) { return value; }
 
         public void DecimalPoint() { }
         public void Mathematics() { }
