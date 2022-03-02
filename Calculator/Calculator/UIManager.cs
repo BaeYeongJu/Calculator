@@ -38,7 +38,7 @@ namespace Calculator
         }
 
         //사칙연산 버튼을 실행
-        public void FunctionButtonClicked(string stringValue) 
+        public void OperatorButtonClicked(string stringValue) 
         {
             if (stringValue == ".")
             {
@@ -97,32 +97,32 @@ namespace Calculator
                     Window.SetOutputText(result.ToString());
                 currentValue = 0;
             }
-            else if (stringValue == "C")
-            {
-                function = Function.Clear;
-                isDecimalPoint = false;
+            //else if (stringValue == "C")
+            //{
+            //    function = Function.Clear;
+            //    isDecimalPoint = false;
                 
-                beforeValue = 0;
-                currentValue = 0;
-                Window.SetOutputText("0");
-                //ComputeManager.Clear
-            }
-            else if (stringValue == "CE")
-            {
-                function = Function.ClearAll;
-                isDecimalPoint = false;
+            //    beforeValue = 0;
+            //    currentValue = 0;
+            //    Window.SetOutputText("0");
+            //    //ComputeManager.Clear
+            //}
+            //else if (stringValue == "CE")
+            //{
+            //    function = Function.ClearAll;
+            //    isDecimalPoint = false;
                 
-                beforeValue = 0;
-                currentValue = 0;
-                Window.SetOutputText("0");
-                //ComputeManager.ClearAll
-            }
-            else if (stringValue == "Delete")
-            {
-                function = Function.Delete;
-                isDecimalPoint = false;
-                ComputeManager.Delete();
-            }
+            //    beforeValue = 0;
+            //    currentValue = 0;
+            //    Window.SetOutputText("0");
+            //    //ComputeManager.ClearAll
+            //}
+            //else if (stringValue == "Delete")
+            //{
+            //    function = Function.Delete;
+            //    isDecimalPoint = false;
+            //    ComputeManager.Delete();
+            //}
             else if (stringValue == "+/-")
             {
                 isOnOff = true;

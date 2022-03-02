@@ -23,7 +23,7 @@ namespace Calculator
     {
         private UIManager uiManager;
         private Dictionary<Button, int> numberButtonDictionary = new Dictionary<Button, int>();
-        private Dictionary<Button, string> functionButtonDictionary = new Dictionary<Button, string>();
+        private Dictionary<Button, string> operatorButtonDictionary = new Dictionary<Button, string>();
         public MainWindow()
         {
             InitializeComponent();
@@ -41,22 +41,22 @@ namespace Calculator
             numberButtonDictionary.Add(EigthtButton, 8);
             numberButtonDictionary.Add(NineButton, 9);
 
-            functionButtonDictionary.Add(DivideButton, "/");
-            functionButtonDictionary.Add(MultiplyButton, "*");
-            functionButtonDictionary.Add(SubtractButton, "-");
-            functionButtonDictionary.Add(AddButton, "+");
-            functionButtonDictionary.Add(ResultButton, "=");
-            functionButtonDictionary.Add(DecimalPointButton, ".");
-            functionButtonDictionary.Add(ClearButton, "C");
-            functionButtonDictionary.Add(ClearAllButton, "CE");
-            functionButtonDictionary.Add(DeleteButton, "Delete");
-            functionButtonDictionary.Add(PlusOnMinus, "+/-");
+            operatorButtonDictionary.Add(DivideButton, "/");
+            operatorButtonDictionary.Add(MultiplyButton, "*");
+            operatorButtonDictionary.Add(SubtractButton, "-");
+            operatorButtonDictionary.Add(AddButton, "+");
+            operatorButtonDictionary.Add(ResultButton, "=");
+            operatorButtonDictionary.Add(DecimalPointButton, ".");
+            operatorButtonDictionary.Add(ClearButton, "C");
+            operatorButtonDictionary.Add(ClearAllButton, "CE");
+            operatorButtonDictionary.Add(DeleteButton, "Delete");
+            operatorButtonDictionary.Add(PlusOnMinus, "+/-");
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            uiManager.FunctionButtonClicked(functionButtonDictionary[button]);
+            uiManager.OperatorButtonClicked(operatorButtonDictionary[button]);
         }
 
         private void ButtonNumberClick(object sender, RoutedEventArgs e)
