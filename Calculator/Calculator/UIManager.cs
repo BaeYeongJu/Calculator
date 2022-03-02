@@ -69,8 +69,11 @@ namespace Calculator
             {
                 function = Function.Plus;
                 isDecimalPoint = false;
+                currentValue = ComputeManager.Add(beforeValue, currentValue);
                 beforeValue = currentValue;
+                Window.SetOutputText(currentValue.ToString());
                 currentValue = 0;
+
             }
             else if(stringValue == "=")
             {
