@@ -24,6 +24,7 @@ namespace Calculator
         private UIManager uiManager;
         private Dictionary<Button, int> numberButtonDictionary = new Dictionary<Button, int>();
         private Dictionary<Button, string> operatorButtonDictionary = new Dictionary<Button, string>();
+        private Dictionary<Button, string> functionButtonDictionary = new Dictionary<Button, string>();
         public MainWindow()
         {
             InitializeComponent();
@@ -47,16 +48,26 @@ namespace Calculator
             operatorButtonDictionary.Add(AddButton, "+");
             operatorButtonDictionary.Add(ResultButton, "=");
             operatorButtonDictionary.Add(DecimalPointButton, ".");
-            operatorButtonDictionary.Add(ClearButton, "C");
-            operatorButtonDictionary.Add(ClearAllButton, "CE");
-            operatorButtonDictionary.Add(DeleteButton, "Delete");
             operatorButtonDictionary.Add(PlusOnMinus, "+/-");
+
+            functionButtonDictionary.Add(ClearButton, "C");
+            functionButtonDictionary.Add(ClearAllButton, "CE");
+            functionButtonDictionary.Add(DeleteButton, "Delete");
         }
 
-        private void ButtonClick(object sender, RoutedEventArgs e)
+        private void OperatorButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+            if (button == null)
+                MessageBox.Show("ButtonNumberClick null");
             uiManager.OperatorButtonClicked(operatorButtonDictionary[button]);
+        }
+        private void FunctionButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button == null)
+                MessageBox.Show("ButtonNumberClick null");
+            uiManager.FunctionButtonClicked(functionButtonDictionary[button]);
         }
 
         private void ButtonNumberClick(object sender, RoutedEventArgs e)
