@@ -14,7 +14,7 @@ namespace Calculator
     }
     class UIManager
     {
-        private MemoryManager memoryManager;
+        private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
         public MainWindow Window { get; set; }
 
