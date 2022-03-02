@@ -28,16 +28,24 @@ namespace Calculator
 
         public double Add(double firstValue, double secondValue)
         {
-            Trace.WriteLine($"compute : {firstValue + secondValue}");
+            Trace.WriteLine($"Add : {firstValue + secondValue}");
             return firstValue + secondValue; 
         }
         public double Subtract(double firstValue, double secondValue) 
         {
-            Trace.WriteLine($"compute : {firstValue - secondValue}");
+            Trace.WriteLine($"Subtract : {firstValue - secondValue}");
             return firstValue - secondValue; 
         }
-        public double Multiply(double firstValue, double secondValue) { return firstValue * secondValue; }
-        public double Divide(double firstValue, double secondValue) { return firstValue / secondValue; }
+        public double Multiply(double firstValue, double secondValue) 
+        {
+            Trace.WriteLine($"Multiply : {firstValue * secondValue}");
+            return firstValue * secondValue; 
+        }
+        public double Divide(double firstValue, double secondValue) 
+        {
+            Trace.WriteLine($"Divide : {firstValue / secondValue}");
+            return firstValue / secondValue; 
+        }
         public double Result(double value) { return value; }
 
         public void DecimalPoint() { }
