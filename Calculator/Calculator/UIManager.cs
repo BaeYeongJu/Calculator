@@ -4,22 +4,26 @@ using System.Diagnostics;
 
 namespace Calculator
 {
-    public enum Function
+    public enum LastOperator
     {
        None,
        Division,
        Plus,
        Minus,
        Multiply,
-       Clear,
-       ClearAll,
-       Delete,
        PlusOnMinus,
+    }
+    public enum LastFunction
+    {
+        None,
+        Clear,
+        ClearAll,
+        Delete,
     }
     class UIManager
     {
         private MemoryManager memoryManager;
-        public ComputeManager ComputeManager = new ComputeManager();
+        private ComputeManager computeManager = new ComputeManager();
         public MainWindow Window { get; set; }
 
         private double currentValue = 0;
@@ -27,13 +31,13 @@ namespace Calculator
         private int decimalPointcount = 1;
         private bool isDecimalPoint = false;
 
-        private Function function = Function.None;
+        private LastOperator lastOperator = LastOperator.None;
+        private LastFunction lastFunction = LastFunction.None;
 
         private bool isOnOff = false;
 
         public UIManager()
         {
-            
             Trace.WriteLine("UIManager");
         }
 
@@ -46,30 +50,42 @@ namespace Calculator
             }
             else if (stringValue == "/")
             {
-                function = Function.Division;
+                //곱하면 자기 자신이 나오는 거
+                Trace.WriteLine("/");
+                lastOperator = LastOperator.Division;
                 isDecimalPoint = false;
+                beforeValue = 1;
+                Trace.WriteLine($"beforeValue :{beforeValue} +currentValue: {currentValue} ");
                 beforeValue = currentValue;
-                currentValue = 0;
+                currentValue = computeManager.Divide(beforeValue, currentValue);
+                Window.SetOutputText(currentValue.ToString());
+                currentValue = beforeValue;
             }
             else if (stringValue == "*")
             {
-                function = Function.Multiply;
+                Trace.WriteLine("*");
+                lastOperator = LastOperator.Multiply;
                 isDecimalPoint = false;
+                beforeValue = 1;
+                currentValue = computeManager.Multiply(beforeValue, currentValue);
                 beforeValue = currentValue;
-                currentValue = 0;
+                Window.SetOutputText(currentValue.ToString());
+                currentValue = beforeValue;
             }
             else if (stringValue == "-")
             {
-                function = Function.Minus;
+                lastOperator = LastOperator.Minus;
                 isDecimalPoint = false;
+                currentValue = computeManager.Subtract(beforeValue, currentValue);
                 beforeValue = currentValue;
-                currentValue = 0;
+                Window.SetOutputText(currentValue.ToString());
+                currentValue = 1;
             }
             else if (stringValue == "+")
             {
-                function = Function.Plus;
+                lastOperator = LastOperator.Plus;
                 isDecimalPoint = false;
-                currentValue = ComputeManager.Add(beforeValue, currentValue);
+                currentValue = computeManager.Add(beforeValue, currentValue);
                 beforeValue = currentValue;
                 Window.SetOutputText(currentValue.ToString());
                 currentValue = 0;
@@ -81,48 +97,20 @@ namespace Calculator
 
                 double result = 0;
 
-                if (function == Function.Plus)
-                    result = ComputeManager.Add(beforeValue, currentValue);
-                else if (function == Function.Minus)
-                    result = ComputeManager.Subtract(beforeValue, currentValue);
-                else if (function == Function.Multiply)
-                    result = ComputeManager.Multiply(beforeValue, currentValue);
-                else if (function == Function.Division)
-                    result = ComputeManager.Divide(beforeValue, currentValue);
+                if (lastOperator == LastOperator.Plus)
+                    result = computeManager.Add(beforeValue, currentValue);
+                else if (lastOperator == LastOperator.Minus)
+                    result = computeManager.Subtract(beforeValue, currentValue);
+                else if (lastOperator == LastOperator.Multiply)
+                    result = computeManager.Multiply(beforeValue, currentValue);
+                else if (lastOperator == LastOperator.Division)
+                    result = computeManager.Divide(beforeValue, currentValue);
 
                 Trace.WriteLine($" result: {result}");
-                if (ComputeManager.isMinus)
-                    Window.SetOutputText(result.ToString()+"-");
-                else
-                    Window.SetOutputText(result.ToString());
+                Window.SetOutputText(result.ToString());
                 currentValue = 0;
             }
-            //else if (stringValue == "C")
-            //{
-            //    function = Function.Clear;
-            //    isDecimalPoint = false;
-                
-            //    beforeValue = 0;
-            //    currentValue = 0;
-            //    Window.SetOutputText("0");
-            //    //ComputeManager.Clear
-            //}
-            //else if (stringValue == "CE")
-            //{
-            //    function = Function.ClearAll;
-            //    isDecimalPoint = false;
-                
-            //    beforeValue = 0;
-            //    currentValue = 0;
-            //    Window.SetOutputText("0");
-            //    //ComputeManager.ClearAll
-            //}
-            //else if (stringValue == "Delete")
-            //{
-            //    function = Function.Delete;
-            //    isDecimalPoint = false;
-            //    ComputeManager.Delete();
-            //}
+            
             else if (stringValue == "+/-")
             {
                 isOnOff = true;
@@ -137,6 +125,36 @@ namespace Calculator
                     currentValue = beforeValue;
                 }
                 //"-" 기호 처리 필요 (UI 보여줄때)
+            }
+        }
+
+        public void FunctionButtonClicked(string stringValue)
+        {
+            if (stringValue == "C")
+            {
+                lastFunction = LastFunction.Clear;
+                isDecimalPoint = false;
+
+                beforeValue = 0;
+                currentValue = 0;
+                Window.SetOutputText("0");
+                //ComputeManager.Clear
+            }
+            else if (stringValue == "CE")
+            {
+                lastFunction = LastFunction.ClearAll;
+                isDecimalPoint = false;
+
+                beforeValue = 0;
+                currentValue = 0;
+                Window.SetOutputText("0");
+                //ComputeManager.ClearAll
+            }
+            else if (stringValue == "Delete")
+            {
+                lastFunction = LastFunction.Delete;
+                isDecimalPoint = false;
+                computeManager.Delete();
             }
         }
 
