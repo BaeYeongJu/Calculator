@@ -34,15 +34,7 @@ namespace Calculator
         public double Subtract(double firstValue, double secondValue) 
         {
             Trace.WriteLine($"compute : {firstValue - secondValue}");
-
-            double result = firstValue - secondValue;
-            if(result < 0)
-            {
-                result *=-1;
-                isMinus = true;
-            }
-
-            return result; 
+            return firstValue - secondValue; 
         }
         public double Multiply(double firstValue, double secondValue) { return firstValue * secondValue; }
         public double Divide(double firstValue, double secondValue) { return firstValue / secondValue; }
