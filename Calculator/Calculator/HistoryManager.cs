@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Calculator
 {
-    class MemoryManager
+    class HistoryManager
     {
         public void Save() { }
         public void SaveAll() { }
