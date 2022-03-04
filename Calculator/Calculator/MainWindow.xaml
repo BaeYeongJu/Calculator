@@ -19,14 +19,14 @@
             <Button x:Name="Memory" Content="M" HorizontalAlignment="Left" VerticalAlignment="Center" Height="37" Width="80" Margin="406,0,0,0" IsEnabled="False" Visibility="Visible" Click="ButtonClick"/>
         </Grid>
         <Grid HorizontalAlignment="Center" Margin="0,218,0,10">
-            <Button x:Name="PercentButton" Content="%" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Click="ButtonClick"/>
+            <Button x:Name="PercentButton" Content="%" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120"/>
             <Button x:Name="ClearAllButton" Content="CE" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,0,0,0" Click="ButtonClick"/>
             <Button x:Name="ClearButton" Content="C" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,0,0,0" Click="ButtonClick"/>
             <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,0,0,0" Click="ButtonClick"/>
 
-            <Button x:Name="ReciprocalButton" Content="1/x" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,50,0,0" Click="ButtonClick"/>
-            <Button x:Name="SquareRootButton" Content="x2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,50,0,0" Click="ButtonClick"/>
-            <Button x:Name="RootButton" Content="√2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,50,0,0" Click="ButtonClick"/>
+            <Button x:Name="ReciprocalButton" Content="1/x" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,50,0,0" />
+            <Button x:Name="SquareRootButton" Content="x2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,50,0,0" />
+            <Button x:Name="RootButton" Content="√2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,50,0,0" />
 
             <Button x:Name="SevenButton" Content="7" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,101,0,0" Click="ButtonNumberClick"/>
             <Button x:Name="EigthtButton" Content="8" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,101,0,0" Click="ButtonNumberClick"/>
