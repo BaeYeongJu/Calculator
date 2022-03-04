@@ -36,9 +36,9 @@ namespace Calculator
 
         private bool isOnOff = false;
 
-        //버튼 flag
-        private bool flag = false;
-        private int count = 0;
+        //연산자 클릭?
+        private bool isOperatorClicked = true;
+        private bool isNumberClicked = true;
         public UIManager()
         {
             Trace.WriteLine("UIManager");
@@ -70,12 +70,9 @@ namespace Calculator
                 Trace.WriteLine("*");
                 lastOperator = LastOperator.Multiply;
                 isDecimalPoint = false;
-                flag = true;
-                if (flag)
+
+                if (isOperatorClicked)
                 {
-                    count++;
-                    if(count == 1)
-                        beforeValue = 1;
                     currentValue = computeManager.Multiply(beforeValue, currentValue);
                     beforeValue = currentValue;
                     Window.SetOutputText(currentValue.ToString());
@@ -84,18 +81,43 @@ namespace Calculator
             }
             else if (stringValue == "-")
             {
-                flag = true;
+                
                 lastOperator = LastOperator.Minus;
                 isDecimalPoint = false;
-                beforeValue = currentValue;
-                currentValue = computeManager.Subtract(beforeValue, currentValue);
-                
-                Window.SetOutputText(currentValue.ToString());
-                currentValue = 0;
+
+                if(isOperatorClicked)
+                {
+                    beforeValue = 0;
+                    currentValue = computeManager.Subtract(beforeValue, currentValue);
+                    Window.SetOutputText(currentValue.ToString());
+                    isOperatorClicked = false;
+                    isNumberClicked = false;
+                }
+                else
+                {
+                    if (isNumberClicked)
+                    {
+                        Trace.WriteLine("---");
+                        beforeValue = currentValue;
+                        currentValue = computeManager.Subtract(beforeValue, currentValue);
+                        Trace.WriteLine($"--: {beforeValue}");
+                        Window.SetOutputText(beforeValue.ToString());
+                        isNumberClicked = false;
+                    }
+                    else
+                    {
+                        currentValue = computeManager.Subtract(beforeValue, currentValue);
+                        beforeValue = currentValue;
+                        Window.SetOutputText(currentValue.ToString());
+                        currentValue = 0;
+                    }
+
+                }
+
             }
             else if (stringValue == "+")
             {
-                flag = true;
+                isOperatorClicked = false;
                 lastOperator = LastOperator.Plus;
                 isDecimalPoint = false;
                 currentValue = computeManager.Add(beforeValue, currentValue);
@@ -107,7 +129,6 @@ namespace Calculator
             else if(stringValue == "=")
             {
                 isDecimalPoint = false;
-                flag = true;
                 double result = 0;
 
                 if (lastOperator == LastOperator.Plus)
@@ -121,8 +142,8 @@ namespace Calculator
 
                 Trace.WriteLine($" result: {result}");
                 Window.SetOutputText(result.ToString());
-                currentValue = 0;
-                count = 0;
+                isOperatorClicked = true;
+                isNumberClicked = true;
             }
             
             else if (stringValue == "+/-")
@@ -152,8 +173,8 @@ namespace Calculator
                 beforeValue = 0;
                 currentValue = 0;
                 Window.SetOutputText("0");
-                flag = false;
-                count = 0;
+                isOperatorClicked = true;
+                isNumberClicked = true;
                 //ComputeManager.Clear
             }
             else if (stringValue == "CE")
@@ -164,7 +185,9 @@ namespace Calculator
                 beforeValue = 0;
                 currentValue = 0;
                 Window.SetOutputText("0");
-                count = 0;
+
+                isOperatorClicked = true;
+                isNumberClicked = true;
                 //ComputeManager.ClearAll
             }
             else if (stringValue == "Delete")
@@ -178,7 +201,8 @@ namespace Calculator
         //숫자를 출력
         public void NumberButtonClicked(int number)
         {
-            flag = false;
+            isOperatorClicked = false;
+
             if (!isDecimalPoint)
             {
                 currentValue = currentValue * 10 + number;
