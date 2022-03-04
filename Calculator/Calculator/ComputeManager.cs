@@ -8,9 +8,6 @@ namespace Calculator
         {
             Trace.WriteLine("ComputeManager");
         }
-
-        public bool isMinus = false;
-
         public void Percent() { }
         public void Delete() { Trace.WriteLine("delete"); }
         public void Clear(double firstValue, double secondValue) 
