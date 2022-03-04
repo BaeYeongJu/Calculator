@@ -25,8 +25,6 @@ namespace Calculator
 
         private Function function = Function.None;
 
-        private bool isOnOff = false;
-
         public UIManager()
         {
             Trace.WriteLine("UIManager");
@@ -41,7 +39,18 @@ namespace Calculator
         //숫자를 출력
         public void NumberButtonClicked(int number)
         {
-            
+            if (!isDecimalPoint)
+            {
+                currentValue = currentValue * 10 + number;
+            }
+            else
+            {
+                currentValue = currentValue + Math.Pow(10, -1 * decimalPointcount) * number;
+                decimalPointcount++;
+            }
+
+            string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
+            Window.SetOutputText(string.Format(stringformat, currentValue));
         }
     }
 }
