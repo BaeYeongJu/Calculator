@@ -42,7 +42,7 @@
 
             <Button x:Name="PlusOnMinus" Content="+/-" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,260,0,0" Click="ButtonClick"/>
             <Button x:Name="ZeroButton" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,260,0,0" Click="ButtonNumberClick"/>
-            <Button x:Name="DecimalPointButton" Content="." HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,260,0,0" Click="ButtonClick"/>
+            <Button x:Name="DecimalPointButton" Content="." HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,260,0,0" Click="OperatorButtonClick"/>
 
             <Button x:Name="DivideButton" Content="÷" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,50,0,0" Click="ButtonClick"/>
             <Button x:Name="MultiplyButton" Content="x" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,101,0,0" Click="ButtonClick"/>
