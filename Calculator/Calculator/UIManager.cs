@@ -31,9 +31,12 @@ namespace Calculator
         }
 
         //사칙연산 버튼을 실행
-        public void FunctionButtonClicked(string stringValue)
+        public void OperatorButtonClicked(string stringValue)
         {
-           
+            if (stringValue == ".")
+            {
+                isDecimalPoint = true;
+            }
         }
 
         //숫자를 출력
