@@ -4,13 +4,14 @@ using System.Diagnostics;
 
 namespace Calculator
 {
-    public enum Function
+    public enum LastOperator
     {
-       None,
-       Division,
-       Plus,
-       Minus,
-       Multiply,
+        None,
+        Division,
+        Plus,
+        Minus,
+        Multiply,
+        Negate,
     }
     class UIManager
     {
@@ -23,7 +24,7 @@ namespace Calculator
         private int decimalPointcount = 1;
         private bool isDecimalPoint = false;
 
-        private Function function = Function.None;
+        private LastOperator lastOperator = LastOperator.None;
 
         public UIManager()
         {
