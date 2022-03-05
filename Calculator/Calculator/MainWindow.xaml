@@ -40,7 +40,7 @@
             <Button x:Name="TwoButton" Content="2" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,206,0,0" Click="ButtonNumberClick"/>
             <Button x:Name="ThreeButton" Content="3" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,206,0,0" Click="ButtonNumberClick"/>
 
-            <Button x:Name="PlusOnMinus" Content="+/-" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,260,0,0" Click="ButtonClick"/>
+            <Button x:Name="Negate" Content="+/-" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="0,260,0,0" Click="ButtonClick"/>
             <Button x:Name="ZeroButton" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="122,260,0,0" Click="ButtonNumberClick"/>
             <Button x:Name="DecimalPointButton" Content="." HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="244,260,0,0" Click="OperatorButtonClick"/>
 
