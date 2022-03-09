@@ -12,7 +12,7 @@ namespace Calculator
        Minus,
        Multiply,
     }
-    class UIManager
+    public class UIManager
     {
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
@@ -43,5 +43,7 @@ namespace Calculator
         {
             
         }
+
+        public double GetCurrentValue() => currentValue;
     }
 }
