@@ -22,6 +22,7 @@ namespace Calculator
     {
         private UIManager uiManager;
         private Dictionary<Button, int> numberButtonDictionary = new Dictionary<Button, int>();
+        private Dictionary<Button, string> operatorButtonDictionary = new Dictionary<Button, string>();
         public MainWindow()
         {
             InitializeComponent();
@@ -38,6 +39,14 @@ namespace Calculator
             numberButtonDictionary.Add(SevenButton, 7);
             numberButtonDictionary.Add(EigthtButton, 8);
             numberButtonDictionary.Add(NineButton, 9);
+
+            operatorButtonDictionary.Add(DivideButton, "/");
+            operatorButtonDictionary.Add(MultiplyButton, "*");
+            operatorButtonDictionary.Add(SubtractButton, "-");
+            operatorButtonDictionary.Add(AddButton, "+");
+            operatorButtonDictionary.Add(ResultButton, "=");
+            operatorButtonDictionary.Add(DecimalPointButton, ".");
+            operatorButtonDictionary.Add(PlusOnMinus, "+/-");
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
@@ -45,6 +54,14 @@ namespace Calculator
             Button button = sender as Button;
             if(button != null)
                 MessageBox.Show($"{button.Name} Click");
+        }
+
+        private void OperatorButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button == null)
+                MessageBox.Show("ButtonNumberClick null");
+            uiManager.OperatorButtonClicked(operatorButtonDictionary[button]);
         }
 
         private void ButtonNumberClick(object sender, RoutedEventArgs e)
