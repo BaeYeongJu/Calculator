@@ -13,7 +13,7 @@ namespace Calculator
         Multiply,
         Negate,
     }
-    class UIManager
+    public class UIManager
     {
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
@@ -56,5 +56,7 @@ namespace Calculator
             string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
             Window.SetOutputText(string.Format(stringformat, currentValue));
         }
+
+        public double GetCurrentValue() => currentValue;
     }
 }

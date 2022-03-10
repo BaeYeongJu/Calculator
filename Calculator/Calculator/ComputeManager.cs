@@ -2,7 +2,7 @@
 using System.Diagnostics;
 namespace Calculator
 {
-    class ComputeManager
+    public class ComputeManager
     {
         public ComputeManager() { Trace.WriteLine("ComputeManager"); }
         public void Percent() { }
