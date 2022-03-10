@@ -11,7 +11,7 @@ namespace Calculator
        Plus,
        Minus,
        Multiply,
-       PlusOnMinus,
+       Negate,
     }
     public enum LastFunction
     {
@@ -85,7 +85,10 @@ namespace Calculator
                 lastOperator = LastOperator.Minus;
                 isDecimalPoint = false;
 
-                if(isOperatorClicked)
+                Trace.WriteLine($" - operator ={isOperatorClicked}");
+                Trace.WriteLine($" - number ={isNumberClicked}");
+
+                if (isOperatorClicked)
                 {
                     beforeValue = 0;
                     currentValue = computeManager.Subtract(beforeValue, currentValue);
@@ -97,7 +100,7 @@ namespace Calculator
                 {
                     if (isNumberClicked)
                     {
-                        Trace.WriteLine("---");
+                        Trace.WriteLine("-");
                         beforeValue = currentValue;
                         currentValue = computeManager.Subtract(beforeValue, currentValue);
                         Trace.WriteLine($"--: {beforeValue}");
@@ -129,27 +132,43 @@ namespace Calculator
             else if(stringValue == "=")
             {
                 isDecimalPoint = false;
-                double result = 0;
 
                 if (lastOperator == LastOperator.Plus)
-                    result = computeManager.Add(beforeValue, currentValue);
+                    currentValue = computeManager.Add(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Minus)
-                    result = computeManager.Subtract(beforeValue, currentValue);
+                    currentValue = computeManager.Subtract(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Multiply)
-                    result = computeManager.Multiply(beforeValue, currentValue);
+                    currentValue = computeManager.Multiply(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Division)
-                    result = computeManager.Divide(beforeValue, currentValue);
+                    currentValue = computeManager.Divide(beforeValue, currentValue);
 
-                Trace.WriteLine($" result: {result}");
-                Window.SetOutputText(result.ToString());
-                isOperatorClicked = true;
-                isNumberClicked = true;
+
+                if(lastOperator == LastOperator.Plus)
+                {
+                    beforeValue = currentValue;
+                    Trace.WriteLine($" result: {currentValue}");
+                    Window.SetOutputText(currentValue.ToString());
+                    currentValue = 0;
+                    isOperatorClicked = true;
+                    isNumberClicked = true;
+                }
+                else if(lastOperator == LastOperator.Minus)
+                {
+                    Trace.WriteLine($" operator ={isOperatorClicked}");
+                    Trace.WriteLine($" number ={isNumberClicked}");
+                    beforeValue = currentValue;
+                    Window.SetOutputText(beforeValue.ToString());
+                    currentValue = 0;
+                    isOperatorClicked = true;
+                    //isNumberClicked = true;
+                }
+                
             }
             
             else if (stringValue == "+/-")
             {
                 isOnOff = true;
-
+                lastOperator = LastOperator.Negate;
                 if (isOnOff)
                 {
                     beforeValue = currentValue * -1;

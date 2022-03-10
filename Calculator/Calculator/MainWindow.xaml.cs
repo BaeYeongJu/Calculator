@@ -48,7 +48,7 @@ namespace Calculator
             operatorButtonDictionary.Add(AddButton, "+");
             operatorButtonDictionary.Add(ResultButton, "=");
             operatorButtonDictionary.Add(DecimalPointButton, ".");
-            operatorButtonDictionary.Add(PlusOnMinus, "+/-");
+            operatorButtonDictionary.Add(Negate, "+/-");
 
             functionButtonDictionary.Add(ClearButton, "C");
             functionButtonDictionary.Add(ClearAllButton, "CE");
