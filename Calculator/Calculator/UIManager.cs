@@ -11,34 +11,31 @@ namespace Calculator
        Plus,
        Minus,
        Multiply,
+       Result,
        Negate,
+       Clear,
+       ClearAll,
+       Delete,
     }
-    public enum LastFunction
-    {
-        None,
-        Clear,
-        ClearAll,
-        Delete,
-    }
+
     class UIManager
     {
         private MemoryManager memoryManager;
         private ComputeManager computeManager = new ComputeManager();
         public MainWindow Window { get; set; }
 
-        private double currentValue = 0;
-        private double beforeValue = 0;
-        private int decimalPointcount = 1;
-        private bool isDecimalPoint = false;
+        private double currentValue = 0; 
+        private double beforeValue = 0; 
+        private int decimalPointcount = 1; //소수인 경우 count
+        private bool isDecimalPoint = false; //소수 이니?
 
-        private LastOperator lastOperator = LastOperator.None;
-        private LastFunction lastFunction = LastFunction.None;
+        private LastOperator lastOperator = LastOperator.None; //숫자
 
-        private bool isOnOff = false;
+        private bool isOperatorClicked = false; //연산자 클릭했니?
+        private bool isNumberClicked = false; //숫자 클릭했니?
+        private bool isResultClicked = false; //= 클릭했니?
+        private bool isFunctionClicked = false; //function 기능 클릭했니?
 
-        //연산자 클릭?
-        private bool isOperatorClicked = true;
-        private bool isNumberClicked = true;
         public UIManager()
         {
             Trace.WriteLine("UIManager");
@@ -47,180 +44,101 @@ namespace Calculator
         //사칙연산 버튼을 실행
         public void OperatorButtonClicked(string stringValue) 
         {
+            if (!isOperatorClicked && !isNumberClicked)
+                isOperatorClicked = true;
+
             if (stringValue == ".")
             {
                 isDecimalPoint = true;
             }
             else if (stringValue == "/")
             {
-                //곱하면 자기 자신이 나오는 거
-                Trace.WriteLine("/");
-                lastOperator = LastOperator.Division;
-                isDecimalPoint = false;
-                beforeValue = 1;
-                Trace.WriteLine($"beforeValue :{beforeValue} +currentValue: {currentValue} ");
-                
-                currentValue = computeManager.Divide(beforeValue, currentValue);
-                Window.SetOutputText(currentValue.ToString());
-                currentValue = beforeValue;
+
             }
             else if (stringValue == "*")
             {
-                //항등원
-                Trace.WriteLine("*");
-                lastOperator = LastOperator.Multiply;
-                isDecimalPoint = false;
 
-                if (isOperatorClicked)
-                {
-                    currentValue = computeManager.Multiply(beforeValue, currentValue);
-                    beforeValue = currentValue;
-                    Window.SetOutputText(currentValue.ToString());
-                    currentValue = 0;
-                }
             }
             else if (stringValue == "-")
             {
-                
-                lastOperator = LastOperator.Minus;
-                isDecimalPoint = false;
-
-                Trace.WriteLine($" - operator ={isOperatorClicked}");
-                Trace.WriteLine($" - number ={isNumberClicked}");
-
-                if (isOperatorClicked)
-                {
-                    beforeValue = 0;
-                    currentValue = computeManager.Subtract(beforeValue, currentValue);
-                    Window.SetOutputText(currentValue.ToString());
-                    isOperatorClicked = false;
-                    isNumberClicked = false;
-                }
-                else
-                {
-                    if (isNumberClicked)
-                    {
-                        Trace.WriteLine("-");
-                        beforeValue = currentValue;
-                        currentValue = computeManager.Subtract(beforeValue, currentValue);
-                        Trace.WriteLine($"--: {beforeValue}");
-                        Window.SetOutputText(beforeValue.ToString());
-                        isNumberClicked = false;
-                    }
-                    else
-                    {
-                        currentValue = computeManager.Subtract(beforeValue, currentValue);
-                        beforeValue = currentValue;
-                        Window.SetOutputText(currentValue.ToString());
-                        currentValue = 0;
-                    }
-
-                }
 
             }
             else if (stringValue == "+")
             {
-                isOperatorClicked = false;
-                lastOperator = LastOperator.Plus;
-                isDecimalPoint = false;
-                currentValue = computeManager.Add(beforeValue, currentValue);
-                beforeValue = currentValue;
-                Window.SetOutputText(currentValue.ToString());
-                currentValue = 0;
-
+                if(lastOperator == LastOperator.Result)
+                {
+                    Trace.WriteLine($"LastOperator.Result: {beforeValue}");
+                    Window.SetComputeText("+" + beforeValue.ToString());
+                    currentValue = 0;
+                    lastOperator = LastOperator.Plus;
+                }
+                else
+                {
+                    lastOperator = LastOperator.Plus;
+                    currentValue = computeManager.Add(beforeValue, currentValue);
+                    beforeValue = currentValue;
+                    Window.SetComputeText("+" + currentValue.ToString());
+                    Window.SetOutputText(currentValue.ToString());
+                    currentValue = 0;
+                }
+                Trace.WriteLine($"lastOperator: {lastOperator}");
             }
             else if(stringValue == "=")
             {
-                isDecimalPoint = false;
-
+                
                 if (lastOperator == LastOperator.Plus)
+                {
+                    Trace.WriteLine($"beforeValue: {beforeValue}");
+                    Trace.WriteLine($"currentValue: {currentValue}");
+                    string result = beforeValue.ToString() + "+" + currentValue.ToString();
+                    Window.SetComputeText("="+result);
                     currentValue = computeManager.Add(beforeValue, currentValue);
+                    beforeValue = currentValue;
+                    Window.SetOutputText(currentValue.ToString());
+                }
                 else if (lastOperator == LastOperator.Minus)
                     currentValue = computeManager.Subtract(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Multiply)
                     currentValue = computeManager.Multiply(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Division)
                     currentValue = computeManager.Divide(beforeValue, currentValue);
+                else
+                    Window.SetComputeText("="+currentValue.ToString());
 
-
-                if(lastOperator == LastOperator.Plus)
-                {
-                    beforeValue = currentValue;
-                    Trace.WriteLine($" result: {currentValue}");
-                    Window.SetOutputText(currentValue.ToString());
-                    currentValue = 0;
-                    isOperatorClicked = true;
-                    isNumberClicked = true;
-                }
-                else if(lastOperator == LastOperator.Minus)
-                {
-                    Trace.WriteLine($" operator ={isOperatorClicked}");
-                    Trace.WriteLine($" number ={isNumberClicked}");
-                    beforeValue = currentValue;
-                    Window.SetOutputText(beforeValue.ToString());
-                    currentValue = 0;
-                    isOperatorClicked = true;
-                    //isNumberClicked = true;
-                }
-                
+                lastOperator = LastOperator.Result;
             }
-            
             else if (stringValue == "+/-")
             {
-                isOnOff = true;
-                lastOperator = LastOperator.Negate;
-                if (isOnOff)
-                {
-                    beforeValue = currentValue * -1;
-                    Trace.WriteLine($"+/- beforeValue :{beforeValue}");
-                    Window.SetOutputText(beforeValue.ToString());
-
-                    isOnOff = false;
-                    currentValue = beforeValue;
-                }
-                //"-" 기호 처리 필요 (UI 보여줄때)
+                currentValue = currentValue * -1;
+                Window.SetOutputText(currentValue.ToString());
             }
-        }
-
-        public void FunctionButtonClicked(string stringValue)
-        {
-            if (stringValue == "C")
+            else if (stringValue == "C")
             {
-                lastFunction = LastFunction.Clear;
-                isDecimalPoint = false;
-
-                beforeValue = 0;
+                isOperatorClicked = false;
+                isNumberClicked = false;
                 currentValue = 0;
+                beforeValue = 0;
+                Window.SetComputeText(string.Empty);
                 Window.SetOutputText("0");
-                isOperatorClicked = true;
-                isNumberClicked = true;
-                //ComputeManager.Clear
+                lastOperator = LastOperator.None;
             }
             else if (stringValue == "CE")
             {
-                lastFunction = LastFunction.ClearAll;
-                isDecimalPoint = false;
 
-                beforeValue = 0;
-                currentValue = 0;
-                Window.SetOutputText("0");
-
-                isOperatorClicked = true;
-                isNumberClicked = true;
-                //ComputeManager.ClearAll
             }
             else if (stringValue == "Delete")
             {
-                lastFunction = LastFunction.Delete;
-                isDecimalPoint = false;
-                computeManager.Delete();
+
             }
+
+            Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
         }
 
         //숫자를 출력
         public void NumberButtonClicked(int number)
         {
-            isOperatorClicked = false;
+            if (!isOperatorClicked && !isNumberClicked)
+                isNumberClicked = true;
 
             if (!isDecimalPoint)
             {
@@ -234,6 +152,8 @@ namespace Calculator
 
             string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
             Window.SetOutputText(string.Format(stringformat, currentValue));
+
+            Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
         }
     }
 }
