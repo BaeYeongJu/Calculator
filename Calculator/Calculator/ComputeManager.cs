@@ -25,6 +25,7 @@ namespace Calculator
 
         public double Add(double firstValue, double secondValue)
         {
+            Trace.WriteLine($"Add first: {firstValue} , second: {secondValue}");
             Trace.WriteLine($"Add : {firstValue + secondValue}");
             return firstValue + secondValue; 
         }
