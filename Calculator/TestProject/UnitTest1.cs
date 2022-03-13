@@ -36,11 +36,11 @@ namespace TestProject
 
         private int CalcData(UIManager manager, string a, string operatorString, string b)
         {
-            manager.FunctionButtonClicked("C");
+            manager.OperatorButtonClicked("C");
             a.ToCharArray().ToList().ForEach(c => manager.NumberButtonClicked(int.Parse(c.ToString())));
-            manager.FunctionButtonClicked(operatorString);
+            manager.OperatorButtonClicked(operatorString);
             b.ToCharArray().ToList().ForEach(c => manager.NumberButtonClicked(int.Parse(c.ToString())));
-            manager.FunctionButtonClicked("=");
+            manager.OperatorButtonClicked("=");
             return (int)manager.GetCurrentValue();
         }
     }

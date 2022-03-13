@@ -46,7 +46,7 @@ namespace Calculator
             operatorButtonDictionary.Add(AddButton, "+");
             operatorButtonDictionary.Add(ResultButton, "=");
             operatorButtonDictionary.Add(DecimalPointButton, ".");
-            operatorButtonDictionary.Add(PlusOnMinus, "+/-");
+            //operatorButtonDictionary.Add(PlusOnMinus, "+/-");
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
