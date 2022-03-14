@@ -54,7 +54,7 @@ namespace Calculator
             }
 
             string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
-            Window.SetOutputText(string.Format(stringformat, currentValue));
+            Window?.SetOutputText(string.Format(stringformat, currentValue));
         }
 
         public double GetCurrentValue() => currentValue;
