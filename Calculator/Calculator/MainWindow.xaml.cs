@@ -24,7 +24,7 @@ namespace Calculator
         private UIManager uiManager;
         private Dictionary<Button, int> numberButtonDictionary = new Dictionary<Button, int>();
         private Dictionary<Button, string> operatorButtonDictionary = new Dictionary<Button, string>();
-
+        public Button ClickedButton = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -61,6 +61,7 @@ namespace Calculator
             if (button == null)
                 MessageBox.Show("ButtonNumberClick null");
             uiManager.OperatorButtonClicked(operatorButtonDictionary[button]);
+            ClickedButton = button;
         }
 
         private void ButtonNumberClick(object sender, RoutedEventArgs e)
