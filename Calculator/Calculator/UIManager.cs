@@ -36,8 +36,7 @@ namespace Calculator
         private bool isResultClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
 
-        private int addCount = 0;
-
+        private bool isNull = false; //연산자용 null 체크
         public UIManager()
         {
             Trace.WriteLine("UIManager");
@@ -68,6 +67,7 @@ namespace Calculator
             }
             else if (stringValue == "+")
             {
+                isNull = true;
                 if (isResultClicked)
                 {
                     beforeValue = currentValue;
@@ -76,6 +76,7 @@ namespace Calculator
                 }
                 else
                 {
+                    //이전 값 가져오고, 연산자를 넣어라
                     currentValue = computeManager.Add(beforeValue, currentValue);
                     beforeValue = currentValue;
                     Trace.WriteLine($"+ decimalPointcount: {decimalPointcount}");
@@ -88,19 +89,42 @@ namespace Calculator
                 lastOperator = LastOperator.Plus;
                 isDecimalPoint = false;
                 decimalPointcount = 1;
-                addCount++;
             }
             else if(stringValue == "=")
             {
+                
                 if (lastOperator == LastOperator.Plus)
                 {
-                    Trace.WriteLine($"= beforeValue: {beforeValue}");
-                    Trace.WriteLine($"= currentValue: {currentValue}");
-                    string result = beforeValue.ToString() + "+" + currentValue.ToString();
-                    Window.SetComputeText("="+result);
-                    //currentValue 
-                    beforeValue = computeManager.Add(beforeValue, currentValue);
-                    Window.SetOutputText(beforeValue.ToString());
+
+                    if(isNull)
+                    {
+
+                        currentValue = beforeValue; 
+                        Window.SetComputeText(beforeValue.ToString() + "+" + currentValue.ToString());
+                        beforeValue = computeManager.Add(beforeValue, currentValue);                                                 //beforeValue = computeManager.Add(beforeValue, beforeValue); 
+                        Window.SetOutputText(beforeValue.ToString());
+                        isNull = false;
+                    }
+                    else if(isNumberClicked && Window.ClickedButton == Window.ResultButton)
+                    {
+
+                        Trace.WriteLine($"=2 beforeValue: {beforeValue}");
+                        Trace.WriteLine($"=2 currentValue: {currentValue}");
+
+                        Window.SetComputeText(beforeValue.ToString() + "+" + currentValue.ToString());
+                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                        Window.SetOutputText(beforeValue.ToString());
+
+                    }
+                    else
+                    {
+                        string result = beforeValue.ToString() + "+" + currentValue.ToString();
+                        Window.SetComputeText("=" + result);
+                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                        Window.SetOutputText(beforeValue.ToString());
+                    }
+
+                    
                 }
                 else if (lastOperator == LastOperator.Minus)
                     currentValue = computeManager.Subtract(beforeValue, currentValue);
@@ -141,7 +165,8 @@ namespace Calculator
             if (!isOperatorClicked && !isNumberClicked)
                 isNumberClicked = true;
 
-            if(isResultClicked)
+            isNull = false;
+            if (isResultClicked)
             {
                 //초기화 (중복 부분)
                 Clear();
@@ -180,7 +205,8 @@ namespace Calculator
             Window.SetOutputText("0");
             lastOperator = LastOperator.None;
             isResultClicked = false;
-            addCount = 0;
+            Window.ClickedButton = null;
+            isNull = false;
         }
     }
 }
