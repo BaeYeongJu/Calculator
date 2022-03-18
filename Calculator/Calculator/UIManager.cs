@@ -68,10 +68,14 @@ namespace Calculator
             else if (stringValue == "+")
             {
                 isNull = true;
-                if (isResultClicked)
+                if (isResultClicked && beforeValue == 0)
                 {
                     beforeValue = currentValue;
                     Trace.WriteLine($"+ LastOperator.Equal : {beforeValue}");
+                    Window.SetComputeText("+" + beforeValue.ToString("0.################"));
+                }
+                else if(isResultClicked && beforeValue != 0)
+                {
                     Window.SetComputeText("+" + beforeValue.ToString("0.################"));
                 }
                 else
@@ -98,7 +102,6 @@ namespace Calculator
 
                     if(isNull)
                     {
-
                         currentValue = beforeValue; 
                         Window.SetComputeText(beforeValue.ToString() + "+" + currentValue.ToString());
                         beforeValue = computeManager.Add(beforeValue, currentValue);                                                 //beforeValue = computeManager.Add(beforeValue, beforeValue); 
@@ -111,7 +114,7 @@ namespace Calculator
                         Trace.WriteLine($"=2 beforeValue: {beforeValue}");
                         Trace.WriteLine($"=2 currentValue: {currentValue}");
 
-                        Window.SetComputeText(beforeValue.ToString() + "+" + currentValue.ToString());
+                        Window.SetComputeText("=" + beforeValue.ToString() + "+" + currentValue.ToString());
                         beforeValue = computeManager.Add(beforeValue, currentValue);
                         Window.SetOutputText(beforeValue.ToString());
 
@@ -166,7 +169,7 @@ namespace Calculator
                 isNumberClicked = true;
 
             isNull = false;
-            if (isResultClicked)
+            if (isResultClicked && lastOperator != LastOperator.Plus)
             {
                 //초기화 (중복 부분)
                 Clear();
