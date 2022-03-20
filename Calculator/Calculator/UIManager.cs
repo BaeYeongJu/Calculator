@@ -34,7 +34,7 @@ namespace Calculator
         private bool isDecimalPoint = false; //소수 이니?
         private bool isOperatorClicked = false; //연산자 클릭했니?
         private bool isNumberClicked = false; //숫자 클릭했니?
-        private bool isResultClicked = false; //= 클릭했니?
+        private bool isEqualClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
 
         private string decimalChange = "0.################";
@@ -75,7 +75,7 @@ namespace Calculator
                 lastOperatorMark = "+";
 
                 //== double 클릭, 기존 값이 0일 경우 
-                if(Window.ClickedButton == Window.ResultButton && beforeValue != 0)
+                if(Window.ClickedButton == Window.EqualButton && beforeValue != 0)
                 {
                     currentValue = beforeValue;
                 }
@@ -85,7 +85,7 @@ namespace Calculator
                     beforeValue = currentValue;
                 }
 
-                isResultClicked = false;
+                isEqualClicked = false;
                 Compute(stringValue, currentValue);
                 currentValue = 0;
             }
@@ -110,7 +110,7 @@ namespace Calculator
                 else
                     Compute(stringValue, currentValue);
 
-                isResultClicked = true;
+                isEqualClicked = true;
             }
             else if (stringValue == "+/-")
             {
@@ -141,14 +141,14 @@ namespace Calculator
                 isNumberClicked = true;
 
             //+,= 연산자 둘다 사용시에
-            if (lastOperator == LastOperator.Plus && isResultClicked)
-                Clear();
+            if (lastOperator == LastOperator.Plus && isEqualClicked)
+                Clear(); //초기화
 
             //= 연산자 사용시에
-            if(isResultClicked)
+            if(isEqualClicked)
             {
                 currentValue = 0;
-                isResultClicked = false;
+                isEqualClicked = false;
             }
 
             if (!isDecimalPoint)
@@ -167,7 +167,6 @@ namespace Calculator
                 currentValue = double.Parse(string.Format(stringformat, currentValue));
 
             Output();
-
             Trace.WriteLine($"num currentValue: {currentValue} , num beforeValue: {beforeValue}");
         }
 
@@ -182,7 +181,7 @@ namespace Calculator
             Window.SetComputeText(string.Empty);
             Window.SetOutputText("0");
             lastOperator = LastOperator.None;
-            isResultClicked = false;
+            isEqualClicked = false;
             Window.ClickedButton = null;
             lastOperatorMark = string.Empty;
         }

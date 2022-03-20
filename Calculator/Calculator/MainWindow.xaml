@@ -48,7 +48,7 @@
             <Button x:Name="MultiplyButton" Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,101,0,0" Click="OperatorButtonClick"/>
             <Button x:Name="SubtractButton" Content="-" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,153,0,0" Click="OperatorButtonClick"/>
             <Button x:Name="AddButton" Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,206,0,0" Click="OperatorButtonClick"/>
-            <Button x:Name="ResultButton" Content="=" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,260,0,0" Click="OperatorButtonClick"/>
+            <Button x:Name="EqualButton" Content="=" HorizontalAlignment="Left" VerticalAlignment="Top" Height="47" Width="120" Margin="366,260,0,0" Click="OperatorButtonClick"/>
         </Grid>
         <TextBlock x:Name="ComputeText" HorizontalAlignment="Left" Margin="10,80,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="478" FlowDirection="RightToLeft" FontSize="16" FontWeight="Bold"/>
     </Grid>

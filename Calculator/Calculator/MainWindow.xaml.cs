@@ -46,7 +46,7 @@ namespace Calculator
             operatorButtonDictionary.Add(MultiplyButton, "*");
             operatorButtonDictionary.Add(SubtractButton, "-");
             operatorButtonDictionary.Add(AddButton, "+");
-            operatorButtonDictionary.Add(ResultButton, "=");
+            operatorButtonDictionary.Add(EqualButton, "=");
             operatorButtonDictionary.Add(DecimalPointButton, ".");
             operatorButtonDictionary.Add(Negate, "+/-");
 
