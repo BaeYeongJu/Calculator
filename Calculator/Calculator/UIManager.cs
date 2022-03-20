@@ -25,7 +25,8 @@ namespace Calculator
         public MainWindow Window { get; set; }
 
         private double currentValue = 0; 
-        private double beforeValue = 0; 
+        private double beforeValue = 0;
+        
         private int decimalPointcount = 1; //소수인 경우 count
 
         private LastOperator lastOperator = LastOperator.None; //숫자
@@ -35,8 +36,6 @@ namespace Calculator
         private bool isNumberClicked = false; //숫자 클릭했니?
         private bool isResultClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-
-        private bool isOperatorNull = false; //연산자용 null 체크
 
         private string decimalChange = "0.################";
         private string lastOperatorMark = string.Empty;
@@ -74,19 +73,33 @@ namespace Calculator
             {
                 lastOperator = LastOperator.Plus;
                 lastOperatorMark = "+";
-                currentValue = computeManager.Add(beforeValue, currentValue);
-                beforeValue = currentValue;
+
+                //== double 클릭, 기존 값이 0일 경우 
+                if(Window.ClickedButton == Window.ResultButton && beforeValue != 0)
+                {
+                    currentValue = beforeValue;
+                }
+                else
+                {
+                    currentValue = computeManager.Add(beforeValue, currentValue);
+                    beforeValue = currentValue;
+                }
+
+                isResultClicked = false;
                 Compute(stringValue, currentValue);
                 currentValue = 0;
             }
             else if(stringValue == "=")
             {
-                isResultClicked = true;
-                
                 if (lastOperator == LastOperator.Plus)
                 {
+                    //= 클릭한 상태 
+                    if (currentValue == 0)
+                        currentValue = beforeValue;
+
                     ComputeResult(lastOperatorMark, stringValue, beforeValue, currentValue);
-                    currentValue = computeManager.Add(beforeValue, currentValue);
+                    beforeValue = computeManager.Add(beforeValue, currentValue);
+                    OutputResult();
                 }
                 else if (lastOperator == LastOperator.Minus)
                     currentValue = computeManager.Subtract(beforeValue, currentValue);
@@ -94,8 +107,10 @@ namespace Calculator
                     currentValue = computeManager.Multiply(beforeValue, currentValue);
                 else if (lastOperator == LastOperator.Division)
                     currentValue = computeManager.Divide(beforeValue, currentValue);
+                else
+                    Compute(stringValue, currentValue);
 
-                Output();
+                isResultClicked = true;
             }
             else if (stringValue == "+/-")
             {
@@ -124,6 +139,17 @@ namespace Calculator
             //처음 숫자 클릭한 경우
             if (!isOperatorClicked && !isNumberClicked)
                 isNumberClicked = true;
+
+            //+,= 연산자 둘다 사용시에
+            if (lastOperator == LastOperator.Plus && isResultClicked)
+                Clear();
+
+            //= 연산자 사용시에
+            if(isResultClicked)
+            {
+                currentValue = 0;
+                isResultClicked = false;
+            }
 
             if (!isDecimalPoint)
             {
@@ -158,13 +184,18 @@ namespace Calculator
             lastOperator = LastOperator.None;
             isResultClicked = false;
             Window.ClickedButton = null;
-            isOperatorNull = false;
             lastOperatorMark = string.Empty;
         }
 
         private void Output()
         {
-            Window.SetOutputText(currentValue.ToString(decimalChange)); //"0.################"
+            Window.SetOutputText(currentValue.ToString(decimalChange));
+        }
+
+        private void OutputResult()
+        {
+            Window.SetOutputText(beforeValue.ToString(decimalChange));
+            Trace.WriteLine($" Output beforeValue: {beforeValue}, currentValue: {currentValue}");
         }
 
         //연산자만 
