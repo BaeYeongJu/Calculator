@@ -4,18 +4,13 @@ using System.Diagnostics;
 
 namespace Calculator
 {
-    public enum LastOperator
+    public enum Operator
     {
        None,
-       Division,
        Plus,
        Minus,
        Multiply,
-       Equal,
-       Negate,
-       Clear,
-       ClearAll,
-       Delete,
+       Division,
     }
 
     class UIManager
@@ -23,13 +18,14 @@ namespace Calculator
         private MemoryManager memoryManager;
         private ComputeManager computeManager = new ComputeManager();
         public MainWindow Window { get; set; }
+        private double lastValue = 0;
 
         private double currentValue = 0; 
         private double beforeValue = 0;
         
         private int decimalPointcount = 1; //소수인 경우 count
 
-        private LastOperator lastOperator = LastOperator.None; //숫자
+        private Operator lastOperator = Operator.None; //숫자
 
         private bool isDecimalPoint = false; //소수 이니?
         private bool isOperatorClicked = false; //연산자 클릭했니?
@@ -67,11 +63,41 @@ namespace Calculator
             }
             else if (stringValue == "-")
             {
+                //if (lastOperator == Operator.None)
+                //{
+                //    beforeValue = currentValue;
+                //    currentValue = 0;
 
+                //    lastOperator = Operator.Minus;
+                //    lastOperatorMark = "-";
+                //    isEqualClicked = false;
+                //    SetText(stringValue, currentValue);
+                //    currentValue = 0;
+                //    return;
+                //}
+
+                lastOperator = Operator.Minus;
+                lastOperatorMark = "-";
+
+
+                //== double 클릭, 기존 값이 0일 경우 
+                if (Window.ClickedButton == Window.EqualButton && beforeValue != 0)
+                {
+                    currentValue = beforeValue;
+                }
+                else
+                {
+                    currentValue = computeManager.Subtract(beforeValue, currentValue);
+                    beforeValue = currentValue;
+                }
+
+                isEqualClicked = false;
+                SetText(stringValue, currentValue);
+                currentValue = 0;
             }
             else if (stringValue == "+")
             {
-                lastOperator = LastOperator.Plus;
+                lastOperator = Operator.Plus;
                 lastOperatorMark = "+";
 
                 //== double 클릭, 기존 값이 0일 경우 
@@ -86,30 +112,39 @@ namespace Calculator
                 }
 
                 isEqualClicked = false;
-                Compute(stringValue, currentValue);
+                SetText(stringValue, currentValue);
                 currentValue = 0;
             }
             else if(stringValue == "=")
             {
-                if (lastOperator == LastOperator.Plus)
+                if (lastOperator == Operator.None)
                 {
+                    SetText(stringValue, currentValue);
+                }
+                else {
                     //= 클릭한 상태 
                     if (currentValue == 0)
                         currentValue = beforeValue;
+                    SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
 
-                    ComputeResult(lastOperatorMark, stringValue, beforeValue, currentValue);
-                    beforeValue = computeManager.Add(beforeValue, currentValue);
+                    if (lastOperator == Operator.Plus)
+                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Minus)
+                        beforeValue = computeManager.Subtract(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Multiply)
+                        beforeValue = computeManager.Multiply(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Division)
+                    {
+                        if (currentValue == 0)
+                        {
+                            //can't calculate
+                        }
+                        beforeValue = computeManager.Divide(beforeValue, currentValue);
+                    }
                     OutputResult();
-                }
-                else if (lastOperator == LastOperator.Minus)
-                    currentValue = computeManager.Subtract(beforeValue, currentValue);
-                else if (lastOperator == LastOperator.Multiply)
-                    currentValue = computeManager.Multiply(beforeValue, currentValue);
-                else if (lastOperator == LastOperator.Division)
-                    currentValue = computeManager.Divide(beforeValue, currentValue);
-                else
-                    Compute(stringValue, currentValue);
 
+
+                }
                 isEqualClicked = true;
             }
             else if (stringValue == "+/-")
@@ -141,7 +176,7 @@ namespace Calculator
                 isNumberClicked = true;
 
             //+,= 연산자 둘다 사용시에
-            if (lastOperator == LastOperator.Plus && isEqualClicked)
+            if (lastOperator == Operator.Plus && isEqualClicked)
                 Clear(); //초기화
 
             //= 연산자 사용시에
@@ -180,7 +215,7 @@ namespace Calculator
             beforeValue = 0;
             Window.SetComputeText(string.Empty);
             Window.SetOutputText("0");
-            lastOperator = LastOperator.None;
+            lastOperator = Operator.None;
             isEqualClicked = false;
             Window.ClickedButton = null;
             lastOperatorMark = string.Empty;
@@ -198,15 +233,16 @@ namespace Calculator
         }
 
         //연산자만 
-        private void Compute(string stringValue, double currentValue)
+        private void SetText(string stringValue, double currentValue)
         {
-            Window.SetComputeText(stringValue + currentValue.ToString(decimalChange));
+            Window.SetComputeText(currentValue.ToString(decimalChange)+ stringValue);
         }
 
         //= 인 경우
-        private void ComputeResult(string lastMark, string stringValue, double beforeValue, double currentValue)
+        private void SetEqualText(string lastMark, string stringValue, double beforeValue, double currentValue)
         {
-            Window.SetComputeText(stringValue + beforeValue.ToString(decimalChange) + lastMark + currentValue.ToString(decimalChange));
+            string temp = beforeValue.ToString(decimalChange) + lastMark + currentValue.ToString(decimalChange) + stringValue;
+            Window.SetComputeText(temp);
         }
     }
 }
