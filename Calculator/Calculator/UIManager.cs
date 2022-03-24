@@ -11,7 +11,6 @@ namespace Calculator
         Plus,
         Minus,
         Multiply,
-        Negate,
     }
 
     class UIManager
@@ -63,7 +62,37 @@ namespace Calculator
             }
             else if (stringValue == "-")
             {
+                //if (lastOperator == Operator.None)
+                //{
+                //    beforeValue = currentValue;
+                //    currentValue = 0;
 
+                //    lastOperator = Operator.Minus;
+                //    lastOperatorMark = "-";
+                //    isEqualClicked = false;
+                //    SetText(stringValue, currentValue);
+                //    currentValue = 0;
+                //    return;
+                //}
+
+                lastOperator = Operator.Minus;
+                lastOperatorMark = "-";
+
+
+                //== double 클릭, 기존 값이 0일 경우 
+                if (Window.ClickedButton == Window.EqualButton && beforeValue != 0)
+                {
+                    currentValue = beforeValue;
+                }
+                else
+                {
+                    currentValue = computeManager.Subtract(beforeValue, currentValue);
+                    beforeValue = currentValue;
+                }
+
+                isEqualClicked = false;
+                SetOperatorText(stringValue, currentValue);
+                currentValue = 0;
             }
             else if (stringValue == "+")
             {
@@ -87,25 +116,34 @@ namespace Calculator
             }
             else if (stringValue == "=")
             {
-                if (lastOperator == Operator.Plus)
+
+                if (lastOperator == Operator.None)
+                {
+                    SetOperatorText(stringValue, currentValue);
+                }
+                else 
                 {
                     //= 클릭한 상태 
                     if (currentValue == 0)
                         currentValue = beforeValue;
-
                     SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
-                    beforeValue = computeManager.Add(beforeValue, currentValue);
+
+                    if (lastOperator == Operator.Plus)
+                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Minus)
+                        beforeValue = computeManager.Subtract(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Multiply)
+                        beforeValue = computeManager.Multiply(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Division)
+                    {
+                        if (currentValue == 0)
+                        {
+                            //can't calculate
+                        }
+                        beforeValue = computeManager.Divide(beforeValue, currentValue);
+                    }
                     OutputResult();
                 }
-                else if (lastOperator == Operator.Minus)
-                    currentValue = computeManager.Subtract(beforeValue, currentValue);
-                else if (lastOperator == Operator.Multiply)
-                    currentValue = computeManager.Multiply(beforeValue, currentValue);
-                else if (lastOperator == Operator.Division)
-                    currentValue = computeManager.Divide(beforeValue, currentValue);
-                else
-                    SetOperatorText(stringValue, currentValue);
-
                 isEqualClicked = true;
             }
             else if (stringValue == "+/-")
