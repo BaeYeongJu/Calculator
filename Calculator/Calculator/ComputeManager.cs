@@ -10,10 +10,27 @@ namespace Calculator
         public void Clear() { Trace.WriteLine("Clear"); }
         public void ClearAll() { Trace.WriteLine("ClearAll"); }
 
-        public double Add(double firstValue, double secondValue) { return firstValue + secondValue; }
-        public double Subtract(double firstValue, double secondValue) { return firstValue - secondValue; }
-        public double Multiply(double firstValue, double secondValue) { return firstValue * secondValue; }
-        public double Divide(double firstValue, double secondValue) { return firstValue / secondValue; }
+        public double Add(double firstValue, double secondValue)
+        {
+            Trace.WriteLine($"Add first: {firstValue} , second: {secondValue}");
+            Trace.WriteLine($"Add : {firstValue + secondValue}");
+            return firstValue + secondValue;
+        }
+        public double Subtract(double firstValue, double secondValue)
+        {
+            Trace.WriteLine($"Subtract : {firstValue - secondValue}");
+            return firstValue - secondValue;
+        }
+        public double Multiply(double firstValue, double secondValue)
+        {
+            Trace.WriteLine($"Multiply : {firstValue * secondValue}");
+            return firstValue * secondValue;
+        }
+        public double Divide(double firstValue, double secondValue)
+        {
+            Trace.WriteLine($"Divide : {firstValue / secondValue}");
+            return firstValue / secondValue;
+        }
         public double Result(double value) { return value; }
 
         public void DecimalPoint() { }
