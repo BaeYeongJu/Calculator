@@ -100,7 +100,7 @@ namespace Calculator
                 lastOperator = Operator.Plus;
                 lastOperatorMark = "+";
 
-                //== double 클릭, 기존 값이 0일 경우 
+                //== double 클릭, 이전 값이 0이 아닌 경우
                 if(Window.ClickedButton == Window.EqualButton && beforeValue != 0)
                 {
                     currentValue = beforeValue;
@@ -142,8 +142,6 @@ namespace Calculator
                         beforeValue = computeManager.Divide(beforeValue, currentValue);
                     }
                     OutputResult();
-
-
                 }
                 isEqualClicked = true;
             }
