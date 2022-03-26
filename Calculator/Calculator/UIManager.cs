@@ -23,7 +23,7 @@ namespace Calculator
         private double currentValue = 0;
         private double beforeValue = 0;
 
-        private int decimalPointcount = 1; //소수인 경우 count
+        private int decimalPointCount = 1; //소수인 경우 count
 
         private Operator lastOperator = Operator.None; //숫자
 
@@ -153,11 +153,11 @@ namespace Calculator
             }
             else
             {
-                currentValue = currentValue + Math.Pow(10, -1 * decimalPointcount) * number;
-                decimalPointcount++;
+                currentValue = currentValue + Math.Pow(10, -1 * decimalPointCount) * number;
+                decimalPointCount++;
             }
 
-            string stringformat = "{0:N" + (decimalPointcount - 1) + "}";
+            string stringformat = "{0:N" + (decimalPointCount - 1) + "}";
 
             if (isDecimalPoint)
                 currentValue = double.Parse(string.Format(stringformat, currentValue));
@@ -169,7 +169,7 @@ namespace Calculator
         private void Clear()
         {
             isDecimalPoint = false;
-            decimalPointcount = 1;
+            decimalPointCount = 1;
             isOperatorClicked = false;
             isNumberClicked = false;
             currentValue = 0;
