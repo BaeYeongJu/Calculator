@@ -82,7 +82,7 @@ namespace Calculator
             OutputText.Text = data;
         }
 
-        public void SetComputeText(string data)
+        public void SetInputText(string data)
         {
             ComputeText.Text = data;
         }
