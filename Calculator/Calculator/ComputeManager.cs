@@ -40,5 +40,10 @@ namespace Calculator
         public void Reciprocal() { }
         public void SquareRoot() { }
         public void Root() { }
+
+        public double ReturnComputeFunc(Func<double,double,double> compute, double value1, double value2)
+        {
+            return compute(value1, value2);
+        }
     }
 }
