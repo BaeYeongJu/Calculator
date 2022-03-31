@@ -10,11 +10,10 @@ namespace Calculator
         Division,
         Plus,
         Minus,
-        Multiply,
-        Negate,
+        Multiply
     }
 
-    class UIManager
+    public class UIManager
     {
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
@@ -48,82 +47,70 @@ namespace Calculator
             if (!isOperatorClicked && !isNumberClicked)
                 isOperatorClicked = true;
 
-            if (stringValue == ".")
+            switch (stringValue)
             {
-                Trace.WriteLine($".");
-                isDecimalPoint = true;
-            }
-            else if (stringValue == "/")
-            {
+                case ".":
+                    Trace.WriteLine($".");
+                    isDecimalPoint = true;
+                    break;
+                case "/":
+                    break;
+                case "*":
+                    break;
+                case "-":
+                    break;
+                case "+":
+                    lastOperator = Operator.Plus;
+                    lastOperatorMark = "+";
 
-            }
-            else if (stringValue == "*")
-            {
-
-            }
-            else if (stringValue == "-")
-            {
-
-            }
-            else if (stringValue == "+")
-            {
-                lastOperator = Operator.Plus;
-                lastOperatorMark = "+";
-
-                //== double 클릭, 기존 값이 0이 아닌 경우 
-                if (Window.ClickedButton == Window.EqualButton && beforeValue != 0)
-                {
-                    currentValue = beforeValue;
-                }
-                else
-                {
-                    currentValue = computeManager.Add(beforeValue, currentValue);
-                    beforeValue = currentValue;
-                }
-
-                isEqualClicked = false;
-                SetOperatorText(stringValue, currentValue);
-                currentValue = 0;
-            }
-            else if (stringValue == "=")
-            {
-                if (lastOperator == Operator.Plus)
-                {
-                    //= 클릭한 상태 
-                    if (currentValue == 0)
+                    //== double 클릭, 기존 값이 0이 아닌 경우 
+                    if (Window.ClickedButton == Window.EqualButton && beforeValue != 0)
+                    {
                         currentValue = beforeValue;
+                    }
+                    else
+                    {
+                        currentValue = computeManager.Add(beforeValue, currentValue);
+                        beforeValue = currentValue;
+                    }
 
-                    SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
-                    beforeValue = computeManager.Add(beforeValue, currentValue);
-                    OutputResult();
-                }
-                else if (lastOperator == Operator.Minus)
-                    currentValue = computeManager.Subtract(beforeValue, currentValue);
-                else if (lastOperator == Operator.Multiply)
-                    currentValue = computeManager.Multiply(beforeValue, currentValue);
-                else if (lastOperator == Operator.Division)
-                    currentValue = computeManager.Divide(beforeValue, currentValue);
-                else
+                    isEqualClicked = false;
                     SetOperatorText(stringValue, currentValue);
+                    currentValue = 0;
+                    break;
+                case "=":
+                    if (lastOperator == Operator.Plus)
+                    {
+                        //= 클릭한 상태 
+                        if (currentValue == 0)
+                            currentValue = beforeValue;
 
-                isEqualClicked = true;
-            }
-            else if (stringValue == "+/-")
-            {
-                currentValue = currentValue * -1;
-                Output();
-            }
-            else if (stringValue == "C")
-            {
-                Clear();
-            }
-            else if (stringValue == "CE")
-            {
+                        SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
+                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                        OutputResult();
+                    }
+                    else if (lastOperator == Operator.Minus)
+                        currentValue = computeManager.Subtract(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Multiply)
+                        currentValue = computeManager.Multiply(beforeValue, currentValue);
+                    else if (lastOperator == Operator.Division)
+                        currentValue = computeManager.Divide(beforeValue, currentValue);
+                    else
+                        SetOperatorText(stringValue, currentValue);
 
-            }
-            else if (stringValue == "Delete")
-            {
-
+                    isEqualClicked = true;
+                    break;
+                case "+/-":
+                    currentValue = currentValue * -1;
+                    Output();
+                    break;
+                case "C":
+                    Clear();
+                    break;
+                case "CE":
+                    break;
+                case "Delete":
+                    break;
             }
 
             Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
@@ -204,5 +191,7 @@ namespace Calculator
         {
             Window?.SetComputeText(beforeValue.ToString(decimalChange) + lastMark + currentValue.ToString(decimalChange) + stringValue);
         }
+
+        public double GetCurrentValue() => currentValue;
     }
 }
