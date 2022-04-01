@@ -67,6 +67,9 @@ namespace Calculator
                     return;
                 }
 
+                lastOperator = Operator.Division;
+                lastOperatorMark = "/";
+
                 OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Divide, beforeValue, currentValue));
             }
             else if (stringValue == "*")
@@ -83,7 +86,8 @@ namespace Calculator
                     return;
                 }
 
-                lastOperator = Operator.Plus;
+                lastOperator = Operator.Multiply;
+                //lastOperator = Operator.Plus;
                 lastOperatorMark = "*";
 
                 OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Multiply, beforeValue, currentValue));
