@@ -13,7 +13,7 @@ namespace Calculator
         Multiply,
     }
 
-    class UIManager
+    public class UIManager
     {
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
@@ -55,52 +55,25 @@ namespace Calculator
             }
             else if (stringValue == "/")
             {
-                if (lastOperator == Operator.None)
-                {
-                    beforeValue = currentValue;
-                    SetText(stringValue, currentValue);
-
-                    lastOperator = Operator.Division;
-                    lastOperatorMark = "/";
-                    currentValue = 0;
-                    isEqualClicked = false;
-                    return;
-                }
+                LastOperatorNone(Operator.Division, stringValue, "/");
+                lastOperator = Operator.Division;
+                lastOperatorMark = "/";
 
                 OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Divide, beforeValue, currentValue));
             }
             else if (stringValue == "*")
             {
-                if (lastOperator == Operator.None)
-                {
-                    beforeValue = currentValue;
-                    SetText(stringValue, currentValue);
+                LastOperatorNone(Operator.Multiply, stringValue, "*");
 
-                    lastOperator = Operator.Multiply;
-                    lastOperatorMark = "*";
-                    currentValue = 0;
-                    isEqualClicked = false;
-                    return;
-                }
-
-                lastOperator = Operator.Plus;
+                lastOperator = Operator.Multiply;
                 lastOperatorMark = "*";
 
                 OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Multiply, beforeValue, currentValue));
             }
             else if (stringValue == "-")
             {
-                if (lastOperator == Operator.None)
-                {
-                    beforeValue = currentValue;
-                    SetText(stringValue, currentValue);
 
-                    lastOperator = Operator.Minus;
-                    lastOperatorMark = "-";
-                    currentValue = 0;
-                    isEqualClicked = false;
-                    return;
-                }
+                LastOperatorNone(Operator.Minus, stringValue, "-");
 
                 lastOperator = Operator.Minus;
                 lastOperatorMark = "-";
@@ -169,6 +142,21 @@ namespace Calculator
             Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
         }
 
+        private void LastOperatorNone(Operator setOperator, string stringValue, string setLastOperatorMark)
+        {
+            if (lastOperator == Operator.None)
+            {
+                beforeValue = currentValue;
+                SetText(stringValue, currentValue);
+
+                lastOperator = setOperator;
+                lastOperatorMark = setLastOperatorMark;
+                currentValue = 0;
+                isEqualClicked = false;
+                return;
+            }
+        }
+
         private void OperatorCompute(string stringValue, double computeFunc)
         {
             //== double 클릭, 기존 값이 0이 아닌 경우 
@@ -217,13 +205,9 @@ namespace Calculator
             {
                 currentValue = currentValue + Math.Pow(10, -1 * decimalPointCount) * number;
                 decimalPointCount++;
-            }
-
-            string stringformat = "{0:N" + (decimalPointCount - 1) + "}";
-
-            if (isDecimalPoint)
+                string stringformat = "{0:N" + (decimalPointCount - 1) + "}";
                 currentValue = double.Parse(string.Format(stringformat, currentValue));
-
+            }
             Output();
             Trace.WriteLine($"num currentValue: {currentValue} , num beforeValue: {beforeValue}");
         }
@@ -272,5 +256,7 @@ namespace Calculator
         {
             Window?.SetInputText(beforeValue.ToString(decimalChange) + lastMark + currentValue.ToString(decimalChange) + stringValue);
         }
+
+        public double GetCurrentValue() => currentValue;
     }
 }
