@@ -31,7 +31,7 @@ namespace Calculator
         private bool isNumberClicked = false; //숫자 클릭했니?
         private bool isEqualClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-        private bool isZeroClicked = false;
+        private bool isfirstZeroClicked = false; // ex)0/2
 
         private string decimalChange = "0.################";
         private string lastOperatorMark = string.Empty;
@@ -55,7 +55,10 @@ namespace Calculator
             }
             else if (stringValue == "/")
             {
-                LastOperatorNone(Operator.Division, stringValue, "/");
+
+                if (LastOperatorNone(Operator.Division, "/", "/"))
+                    return;
+
                 lastOperator = Operator.Division;
                 lastOperatorMark = "/";
 
@@ -63,7 +66,8 @@ namespace Calculator
             }
             else if (stringValue == "*")
             {
-                LastOperatorNone(Operator.Multiply, stringValue, "*");
+                if (LastOperatorNone(Operator.Multiply, "*", "*"))
+                    return;
 
                 lastOperator = Operator.Multiply;
                 lastOperatorMark = "*";
@@ -72,8 +76,8 @@ namespace Calculator
             }
             else if (stringValue == "-")
             {
-
-                LastOperatorNone(Operator.Minus, stringValue, "-");
+                if (LastOperatorNone(Operator.Minus, "-", "-"))
+                    return;
 
                 lastOperator = Operator.Minus;
                 lastOperatorMark = "-";
@@ -97,7 +101,7 @@ namespace Calculator
                 else 
                 {
                     //= 클릭한 상태 
-                    if (currentValue == 0 && !isZeroClicked)
+                    if (currentValue == 0 && !isfirstZeroClicked) 
                         currentValue = beforeValue;
                     SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
 
@@ -142,7 +146,7 @@ namespace Calculator
             Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
         }
 
-        private void LastOperatorNone(Operator setOperator, string stringValue, string setLastOperatorMark)
+        private bool LastOperatorNone(Operator setOperator, string stringValue, string setLastOperatorMark)
         {
             if (lastOperator == Operator.None)
             {
@@ -153,8 +157,9 @@ namespace Calculator
                 lastOperatorMark = setLastOperatorMark;
                 currentValue = 0;
                 isEqualClicked = false;
-                return;
+                return true;
             }
+            return false;
         }
 
         private void OperatorCompute(string stringValue, double computeFunc)
@@ -188,7 +193,7 @@ namespace Calculator
                 Clear();
 
             if (number == 0)
-                isZeroClicked = true;
+                isfirstZeroClicked = true;
 
             //= 연산자 사용시에
             if (isEqualClicked)
@@ -226,7 +231,7 @@ namespace Calculator
             isEqualClicked = false;
             Window.ClickedButton = null;
             lastOperatorMark = string.Empty;
-            isZeroClicked = false;
+            isfirstZeroClicked = false;
         }
 
         private void Output()
