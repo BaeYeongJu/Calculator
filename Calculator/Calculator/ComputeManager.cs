@@ -41,9 +41,9 @@ namespace Calculator
         public void SquareRoot() { }
         public void Root() { }
 
-        public double ReturnComputeFunc(Func<double,double,double> compute, double value1, double value2)
+        public double ReturnComputeFunc(Func<double,double,double> compute, double firstValue, double secondValue)
         {
-            return compute(value1, value2);
+            return compute(firstValue, secondValue);
         }
     }
 }
