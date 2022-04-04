@@ -33,7 +33,7 @@ namespace Calculator
         private bool isFunctionClicked = false; //function 기능 클릭했니?
         private bool isfirstZeroClicked = false; // ex)0/2
 
-        private string decimalChange = "0.################";
+        private string decimalChange = "0.#################";
         private string lastOperatorMark = string.Empty;
 
         public UIManager()
@@ -48,14 +48,19 @@ namespace Calculator
             if (!isOperatorClicked && !isNumberClicked)
                 isOperatorClicked = true;
 
+            if (stringValue != ".")
+                isDecimalPoint = false;
+
             if (stringValue == ".")
             {
-                Trace.WriteLine($".");
+                Trace.WriteLine(". click");
                 isDecimalPoint = true;
+
+                Window?.SetOutputText(currentValue + ".");
             }
             else if (stringValue == "/")
             {
-
+                //isDecimalPoint = false;
                 if (LastOperatorNone(Operator.Division, "/", "/"))
                     return;
 
@@ -66,6 +71,7 @@ namespace Calculator
             }
             else if (stringValue == "*")
             {
+                //isDecimalPoint = false;
                 if (LastOperatorNone(Operator.Multiply, "*", "*"))
                     return;
 
@@ -76,6 +82,7 @@ namespace Calculator
             }
             else if (stringValue == "-")
             {
+                //isDecimalPoint = false;
                 if (LastOperatorNone(Operator.Minus, "-", "-"))
                     return;
 
@@ -86,6 +93,7 @@ namespace Calculator
             }
             else if (stringValue == "+")
             {
+                //isDecimalPoint = false;
                 lastOperator = Operator.Plus;
                 lastOperatorMark = "+";
 
@@ -93,15 +101,16 @@ namespace Calculator
             }
             else if (stringValue == "=")
             {
+                //isDecimalPoint = false;
 
                 if (lastOperator == Operator.None)
                 {
                     SetText(stringValue, currentValue);
                 }
-                else 
+                else
                 {
                     //= 클릭한 상태 
-                    if (currentValue == 0 && !isfirstZeroClicked) 
+                    if (currentValue == 0 && !isfirstZeroClicked)
                         currentValue = beforeValue;
                     SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
 
@@ -127,6 +136,8 @@ namespace Calculator
             }
             else if (stringValue == "+/-")
             {
+                if (currentValue == 0)
+                    return;
                 currentValue = currentValue * -1;
                 Output();
             }
