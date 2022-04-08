@@ -22,7 +22,7 @@ namespace Calculator
         private double currentValue = 0;
         private double beforeValue = 0;
 
-        private int decimalPointCount = 1; //소수인 경우 count
+        private int decimalPointCount = 0; //소수인 경우 count
 
         private Operator lastOperator = Operator.None; //숫자
 
@@ -49,7 +49,10 @@ namespace Calculator
                 isOperatorClicked = true;
 
             if (stringValue != ".")
+            {
                 isDecimalPoint = false;
+                decimalPointCount = 0;
+            }    
 
             if (stringValue == ".")
             {
@@ -219,10 +222,8 @@ namespace Calculator
             }
             else
             {
-                currentValue = currentValue + Math.Pow(10, -1 * decimalPointCount) * number;
                 decimalPointCount++;
-                string stringformat = "{0:N" + (decimalPointCount - 1) + "}";
-                currentValue = double.Parse(string.Format(stringformat, currentValue));
+                currentValue = currentValue + Math.Pow(10, -1 * decimalPointCount) * number;
             }
             Output();
             Trace.WriteLine($"num currentValue: {currentValue} , num beforeValue: {beforeValue}");
@@ -231,13 +232,13 @@ namespace Calculator
         private void Clear()
         {
             isDecimalPoint = false;
-            decimalPointCount = 1;
+            decimalPointCount = 0;
             isOperatorClicked = false;
             isNumberClicked = false;
             currentValue = 0;
             beforeValue = 0;
-            Window.SetInputText(string.Empty);
-            Window.SetOutputText("0");
+            Window?.SetInputText(string.Empty);
+            Window?.SetOutputText("0");
             lastOperator = Operator.None;
             isEqualClicked = false;
             Window.ClickedButton = null;
@@ -247,13 +248,20 @@ namespace Calculator
 
         private void Output()
         {
-            Window?.SetOutputText(currentValue.ToString(decimalChange));
+            if(currentValue % 1 != 0)
+                Window?.SetOutputText(currentValue.ToString(decimalChange));
+            else
+                Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue));
+            //Window?.SetOutputText(currentValue.ToString(decimalChange));
         }
 
         private void OutputResult()
         {
-            Window?.SetOutputText(beforeValue.ToString(decimalChange));
-            Trace.WriteLine($" Output beforeValue: {beforeValue}, currentValue: {currentValue}");
+            if(beforeValue % 1 != 0)
+                Window?.SetOutputText(beforeValue.ToString());
+            else
+                Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", beforeValue));
+            //Window?.SetOutputText(beforeValue.ToString(decimalChange));
         }
 
         private void ZeroOutput()
@@ -261,16 +269,27 @@ namespace Calculator
             Window?.SetOutputText("0으로 나눌 수 없습니다");
         }
 
+        //입력
+
         //연산자만 
         private void SetText(string stringValue, double currentValue)
         {
-            Window?.SetInputText(currentValue.ToString(decimalChange) + stringValue);
+            if(currentValue % 1 != 0) //(lastOperator != Operator.None
+            {
+                Window?.SetInputText(currentValue.ToString() + stringValue);
+            }  
+            else
+            {
+                Window?.SetInputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue) + stringValue);
+            }
+                
         }
 
         //= 인 경우
         private void SetEqualText(string lastMark, string stringValue, double beforeValue, double currentValue)
         {
-            Window?.SetInputText(beforeValue.ToString(decimalChange) + lastMark + currentValue.ToString(decimalChange) + stringValue);
+            Trace.WriteLine($"SetEqualText currentValue: {currentValue} , num beforeValue: {beforeValue}");
+            Window?.SetInputText(string.Format("{0:N" + (decimalPointCount) + "}", beforeValue) + lastMark + string.Format("{0:N" + (decimalPointCount) + "}", currentValue) + stringValue);
         }
 
         public double GetCurrentValue() => currentValue;
