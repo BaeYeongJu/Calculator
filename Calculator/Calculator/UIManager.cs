@@ -33,7 +33,7 @@ namespace Calculator
         private bool isFunctionClicked = false; //function 기능 클릭했니?
         private bool isfirstZeroClicked = false; // ex)0/2
 
-        private string decimalChange = "0.#################";
+        private string outputFormat = "0.#################";
         private string lastOperatorMark = string.Empty;
 
         public UIManager()
@@ -190,6 +190,7 @@ namespace Calculator
             }
 
             isEqualClicked = false;
+            Window?.SetOutputText(currentValue.ToString(outputFormat));
             SetText(stringValue, currentValue);
             currentValue = 0;
         }
@@ -248,20 +249,14 @@ namespace Calculator
 
         private void Output()
         {
-            if(currentValue % 1 != 0)
-                Window?.SetOutputText(currentValue.ToString(decimalChange));
-            else
-                Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue));
-            //Window?.SetOutputText(currentValue.ToString(decimalChange));
+            Trace.WriteLine($"Output decimalPointCount: {decimalPointCount}");
+            Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue));
         }
 
         private void OutputResult()
         {
-            if(beforeValue % 1 != 0)
-                Window?.SetOutputText(beforeValue.ToString());
-            else
-                Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", beforeValue));
-            //Window?.SetOutputText(beforeValue.ToString(decimalChange));
+            Trace.WriteLine($"OutputResult decimalPointCount: {decimalPointCount}");
+            Window?.SetOutputText(beforeValue.ToString(outputFormat));
         }
 
         private void ZeroOutput()
@@ -274,22 +269,13 @@ namespace Calculator
         //연산자만 
         private void SetText(string stringValue, double currentValue)
         {
-            if(currentValue % 1 != 0) //(lastOperator != Operator.None
-            {
-                Window?.SetInputText(currentValue.ToString() + stringValue);
-            }  
-            else
-            {
-                Window?.SetInputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue) + stringValue);
-            }
-                
+            Window?.SetInputText(currentValue.ToString(outputFormat) + stringValue);
         }
 
         //= 인 경우
         private void SetEqualText(string lastMark, string stringValue, double beforeValue, double currentValue)
         {
-            Trace.WriteLine($"SetEqualText currentValue: {currentValue} , num beforeValue: {beforeValue}");
-            Window?.SetInputText(string.Format("{0:N" + (decimalPointCount) + "}", beforeValue) + lastMark + string.Format("{0:N" + (decimalPointCount) + "}", currentValue) + stringValue);
+            Window?.SetInputText(beforeValue.ToString(outputFormat) + lastMark + currentValue.ToString(outputFormat) + stringValue);
         }
 
         public double GetCurrentValue() => currentValue;
