@@ -17,28 +17,34 @@ namespace Calculator
     {
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
+        private InputManager inputManager;
+
         public MainWindow Window { get; set; }
+        
 
-        private double currentValue = 0;
-        private double beforeValue = 0;
+        public double currentValue = 0;
+        public double beforeValue = 0;
 
-        private int decimalPointCount = 0; //소수인 경우 count
+        public int decimalPointCount = 0; //소수인 경우 count
 
-        private Operator lastOperator = Operator.None; //숫자
+        public Operator lastOperator = Operator.None; //숫자
 
-        private bool isDecimalPoint = false; //소수 이니?
-        private bool isOperatorClicked = false; //연산자 클릭했니?
-        private bool isNumberClicked = false; //숫자 클릭했니?
-        private bool isEqualClicked = false; //= 클릭했니?
+        public bool isDecimalPoint = false; //소수 이니?
+        public bool isOperatorClicked = false; //연산자 클릭했니?
+        public bool isNumberClicked = false; //숫자 클릭했니?
+        public bool isEqualClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-        private bool isfirstZeroClicked = false; // ex)0/2
+        public bool isfirstZeroClicked = false; // ex)0/2
 
-        private string outputFormat = "0.#################";
+        public string outputFormat = "0.#################";
         private string lastOperatorMark = string.Empty;
 
         public UIManager()
         {
             Trace.WriteLine("UIManager");
+
+            inputManager = new InputManager();
+            inputManager.uIManager = this;
         }
 
         //사칙연산 버튼을 실행
@@ -104,7 +110,7 @@ namespace Calculator
             }
             else if (stringValue == "=")
             {
-                //isDecimalPoint = false;
+                isDecimalPoint = false;
 
                 if (lastOperator == Operator.None)
                 {
@@ -165,7 +171,7 @@ namespace Calculator
             if (lastOperator == Operator.None)
             {
                 beforeValue = currentValue;
-                SetText(stringValue, currentValue);
+                //SetText(stringValue, currentValue);
 
                 lastOperator = setOperator;
                 lastOperatorMark = setLastOperatorMark;
@@ -191,11 +197,17 @@ namespace Calculator
 
             isEqualClicked = false;
             Window?.SetOutputText(currentValue.ToString(outputFormat));
-            SetText(stringValue, currentValue);
+            //SetText(stringValue, currentValue);
             currentValue = 0;
         }
 
         //숫자를 출력
+        public void NumberButtonClicked(int number)
+        {
+            inputManager.NumberButtonClicked(number);
+        }
+
+        /*
         public void NumberButtonClicked(int number)
         {
 
@@ -229,8 +241,9 @@ namespace Calculator
             Output();
             Trace.WriteLine($"num currentValue: {currentValue} , num beforeValue: {beforeValue}");
         }
+        */
 
-        private void Clear()
+        public void Clear()
         {
             isDecimalPoint = false;
             decimalPointCount = 0;
@@ -246,8 +259,7 @@ namespace Calculator
             lastOperatorMark = string.Empty;
             isfirstZeroClicked = false;
         }
-
-        private void Output()
+        public void Output()
         {
             Trace.WriteLine($"Output decimalPointCount: {decimalPointCount}");
             Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue));
