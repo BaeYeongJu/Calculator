@@ -78,12 +78,12 @@ namespace Calculator
             uiManager.NumberButtonClicked(numberButtonDictionary[button]);
         }
 
-        public void ResultText(string data)
+        public void SetResultText(string data)
         {
             OutputText.Text = data;
         }
 
-        public void CalculatedText(string data)
+        public void SetCalculatedText(string data)
         {
             ComputeText.Text = data;
         }
