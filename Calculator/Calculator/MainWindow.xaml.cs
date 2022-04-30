@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,12 +78,12 @@ namespace Calculator
             uiManager.NumberButtonClicked(numberButtonDictionary[button]);
         }
 
-        public void SetOutputText(string data)
+        public void ResultText(string data)
         {
             OutputText.Text = data;
         }
 
-        public void SetInputText(string data)
+        public void CalculatedText(string data)
         {
             ComputeText.Text = data;
         }

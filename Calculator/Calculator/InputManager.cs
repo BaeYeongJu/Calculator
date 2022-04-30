@@ -21,34 +21,34 @@ namespace Calculator
         {
 
             //처음 숫자 클릭한 경우
-            if (!uIManager.isOperatorClicked && !uIManager.isNumberClicked)
-                uIManager.isNumberClicked = true;
+            if (!uIManager.IsOperatorClicked && !uIManager.IsNumberClicked)
+                uIManager.IsNumberClicked = true;
 
             //+,= 연산자 둘다 사용시에
-            if (uIManager.lastOperator == Operator.Plus && uIManager.isEqualClicked)
+            if (uIManager.lastOperator == Operator.Plus && uIManager.IsEqualClicked)
                 uIManager.Clear();
 
             if (number == 0)
-                uIManager.isfirstZeroClicked = true;
+                uIManager.IsfirstZeroClicked = true;
 
             //= 연산자 사용시에
-            if (uIManager.isEqualClicked)
+            if (uIManager.IsEqualClicked)
             {
-                uIManager.currentValue = 0;
-                uIManager.isEqualClicked = false;
+                uIManager.CurrentValue = 0;
+                uIManager.IsEqualClicked = false;
             }
 
-            if (!uIManager.isDecimalPoint)
+            if (!uIManager.IsDecimalPoint)
             {
-                uIManager.currentValue = uIManager.currentValue * 10 + number;
+                uIManager.CurrentValue = uIManager.CurrentValue * 10 + number;
             }
             else
             {
-                uIManager.decimalPointCount++;
-                uIManager.currentValue = uIManager.currentValue + Math.Pow(10, -1 * uIManager.decimalPointCount) * number;
+                uIManager.DecimalPointCount++;
+                uIManager.CurrentValue = uIManager.CurrentValue + Math.Pow(10, -1 * uIManager.DecimalPointCount) * number;
             }
-            uIManager.Output();
-            Trace.WriteLine($"num currentValue: {uIManager.currentValue} , num beforeValue: {uIManager.beforeValue}");
+            uIManager.Input();
+            Trace.WriteLine($"num currentValue: {uIManager.CurrentValue} , num beforeValue: {uIManager.BeforeValue}");
         }
     }
 }

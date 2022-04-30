@@ -21,21 +21,21 @@ namespace Calculator
 
         public MainWindow Window { get; set; }
 
-        public double currentValue = 0;
-        public double beforeValue = 0;
+        public double CurrentValue = 0;
+        public double BeforeValue = 0;
 
-        public int decimalPointCount = 0; //소수인 경우 count
+        public int DecimalPointCount = 0; //소수인 경우 count
 
         public Operator lastOperator = Operator.None; //숫자
 
-        public bool isDecimalPoint = false; //소수 이니?
-        public bool isOperatorClicked = false; //연산자 클릭했니?
-        public bool isNumberClicked = false; //숫자 클릭했니?
-        public bool isEqualClicked = false; //= 클릭했니?
+        public bool IsDecimalPoint = false; //소수 이니?
+        public bool IsOperatorClicked = false; //연산자 클릭했니?
+        public bool IsNumberClicked = false; //숫자 클릭했니?
+        public bool IsEqualClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-        public bool isfirstZeroClicked = false; // ex)0/2
+        public bool IsfirstZeroClicked = false; // ex)0/2
 
-        public string outputFormat = "0.#################";
+        public string OutputFormat = "0.#################";
         private string lastOperatorMark = string.Empty;
 
         public UIManager()
@@ -50,21 +50,21 @@ namespace Calculator
         public void OperatorButtonClicked(string stringValue)
         {
             //처음 사칙연산 클릭한 경우
-            if (!isOperatorClicked && !isNumberClicked)
-                isOperatorClicked = true;
+            if (!IsOperatorClicked && !IsNumberClicked)
+                IsOperatorClicked = true;
 
             if (stringValue != ".")
             {
-                isDecimalPoint = false;
-                decimalPointCount = 0;
+                IsDecimalPoint = false;
+                DecimalPointCount = 0;
             }    
 
             if (stringValue == ".")
             {
                 Trace.WriteLine(". click");
-                isDecimalPoint = true;
+                IsDecimalPoint = true;
 
-                Window?.SetOutputText(currentValue + ".");
+                Window?.ResultText(CurrentValue + ".");
             }
             else if (stringValue == "/")
             {
@@ -75,7 +75,7 @@ namespace Calculator
                 lastOperator = Operator.Division;
                 lastOperatorMark = "/";
 
-                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Divide, beforeValue, currentValue));
+                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Divide, BeforeValue, CurrentValue));
             }
             else if (stringValue == "*")
             {
@@ -86,7 +86,7 @@ namespace Calculator
                 lastOperator = Operator.Multiply;
                 lastOperatorMark = "*";
 
-                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Multiply, beforeValue, currentValue));
+                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Multiply, BeforeValue, CurrentValue));
             }
             else if (stringValue == "-")
             {
@@ -97,7 +97,7 @@ namespace Calculator
                 lastOperator = Operator.Minus;
                 lastOperatorMark = "-";
 
-                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Subtract, beforeValue, currentValue));
+                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Subtract, BeforeValue, CurrentValue));
             }
             else if (stringValue == "+")
             {
@@ -105,49 +105,49 @@ namespace Calculator
                 lastOperator = Operator.Plus;
                 lastOperatorMark = "+";
 
-                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Add, beforeValue, currentValue));
+                OperatorCompute(stringValue, computeManager.ReturnComputeFunc(computeManager.Add, BeforeValue, CurrentValue));
             }
             else if (stringValue == "=")
             {
-                isDecimalPoint = false;
+                IsDecimalPoint = false;
 
                 if (lastOperator == Operator.None)
                 {
-                    SetText(stringValue, currentValue);
+                    CurrentValueOutput(stringValue, CurrentValue);
                 }
                 else
                 {
                     //= 클릭한 상태 
-                    if (currentValue == 0 && !isfirstZeroClicked)
-                        currentValue = beforeValue;
-                    SetEqualText(lastOperatorMark, stringValue, beforeValue, currentValue);
+                    if (CurrentValue == 0 && !IsfirstZeroClicked)
+                        CurrentValue = BeforeValue;
+                    OutputResult(lastOperatorMark, stringValue, BeforeValue, CurrentValue);
 
                     if (lastOperator == Operator.Plus)
-                        beforeValue = computeManager.Add(beforeValue, currentValue);
+                        BeforeValue = computeManager.Add(BeforeValue, CurrentValue);
                     else if (lastOperator == Operator.Minus)
-                        beforeValue = computeManager.Subtract(beforeValue, currentValue);
+                        BeforeValue = computeManager.Subtract(BeforeValue, CurrentValue);
                     else if (lastOperator == Operator.Multiply)
-                        beforeValue = computeManager.Multiply(beforeValue, currentValue);
+                        BeforeValue = computeManager.Multiply(BeforeValue, CurrentValue);
                     else if (lastOperator == Operator.Division)
                     {
-                        if (currentValue == 0)
+                        if (CurrentValue == 0)
                         {
                             //can't calculate
-                            ZeroOutput();
+                            ZeroText();
                             return;
                         }
-                        beforeValue = computeManager.Divide(beforeValue, currentValue);
+                        BeforeValue = computeManager.Divide(BeforeValue, CurrentValue);
                     }
-                    OutputResult();
+                    InputResult();
                 }
-                isEqualClicked = true;
+                IsEqualClicked = true;
             }
             else if (stringValue == "+/-")
             {
-                if (currentValue == 0)
+                if (CurrentValue == 0)
                     return;
-                currentValue = currentValue * -1;
-                Output();
+                CurrentValue = CurrentValue * -1;
+                Input();
             }
             else if (stringValue == "C")
             {
@@ -162,42 +162,42 @@ namespace Calculator
 
             }
 
-            Trace.WriteLine($"isOperatorClicked:{isOperatorClicked} ,isNumberClicked:{isNumberClicked}");
+            Trace.WriteLine($"isOperatorClicked:{IsOperatorClicked} ,isNumberClicked:{IsNumberClicked}");
         }
 
-        private bool LastOperatorNone(Operator setOperator, string stringValue, string setLastOperatorMark)
+        private bool LastOperatorNone(Operator setOperator, string opeartorValue, string setLastOperatorMark)
         {
             if (lastOperator == Operator.None)
             {
-                beforeValue = currentValue;
-                //SetText(stringValue, currentValue);
+                BeforeValue = CurrentValue;
+                CurrentValueOutput(opeartorValue, CurrentValue);
 
                 lastOperator = setOperator;
                 lastOperatorMark = setLastOperatorMark;
-                currentValue = 0;
-                isEqualClicked = false;
+                CurrentValue = 0;
+                IsEqualClicked = false;
                 return true;
             }
             return false;
         }
 
-        private void OperatorCompute(string stringValue, double computeFunc)
+        private void OperatorCompute(string opeartorValue, double computeFunc)
         {
             //== double 클릭, 기존 값이 0이 아닌 경우 
-            if (Window.ClickedButton == Window.EqualButton && beforeValue != 0)
+            if (Window.ClickedButton == Window.EqualButton && BeforeValue != 0)
             {
-                currentValue = beforeValue;
+                CurrentValue = BeforeValue;
             }
             else
             {
-                currentValue = computeFunc;
-                beforeValue = currentValue;
+                CurrentValue = computeFunc;
+                BeforeValue = CurrentValue;
             }
 
-            isEqualClicked = false;
-            Window?.SetOutputText(currentValue.ToString(outputFormat));
-            //SetText(stringValue, currentValue);
-            currentValue = 0;
+            IsEqualClicked = false;
+            Window?.ResultText(CurrentValue.ToString(OutputFormat));
+            CurrentValueOutput(opeartorValue, CurrentValue);
+            CurrentValue = 0;
         }
 
         //숫자를 출력
@@ -208,51 +208,52 @@ namespace Calculator
 
         public void Clear()
         {
-            isDecimalPoint = false;
-            decimalPointCount = 0;
-            isOperatorClicked = false;
-            isNumberClicked = false;
-            currentValue = 0;
-            beforeValue = 0;
-            Window?.SetInputText(string.Empty);
-            Window?.SetOutputText("0");
+            IsDecimalPoint = false;
+            DecimalPointCount = 0;
+            IsOperatorClicked = false;
+            IsNumberClicked = false;
+            CurrentValue = 0;
+            BeforeValue = 0;
+            Window?.CalculatedText(string.Empty);
+            Window?.ResultText("0");
             lastOperator = Operator.None;
-            isEqualClicked = false;
+            IsEqualClicked = false;
             Window.ClickedButton = null;
             lastOperatorMark = string.Empty;
-            isfirstZeroClicked = false;
+            IsfirstZeroClicked = false;
         }
-        public void Output()
+        public void Input()
         {
-            Trace.WriteLine($"Output decimalPointCount: {decimalPointCount}");
-            Window?.SetOutputText(string.Format("{0:N" + (decimalPointCount) + "}", currentValue));
-        }
-
-        private void OutputResult()
-        {
-            Trace.WriteLine($"OutputResult decimalPointCount: {decimalPointCount}");
-            Window?.SetOutputText(beforeValue.ToString(outputFormat));
+            Trace.WriteLine($"Output decimalPointCount: {DecimalPointCount}");
+            Window?.ResultText(string.Format("{0:N" + (DecimalPointCount) + "}", CurrentValue));
         }
 
-        private void ZeroOutput()
+        private void InputResult()
         {
-            Window?.SetOutputText("0으로 나눌 수 없습니다");
+            Trace.WriteLine($"OutputResult decimalPointCount: {DecimalPointCount}");
+            Window?.ResultText(BeforeValue.ToString(OutputFormat));
+        }
+
+        private void ZeroText()
+        {
+            Window?.ResultText("0으로 나눌 수 없습니다");
         }
 
         //입력
 
-        //연산자만 
-        private void SetText(string stringValue, double currentValue)
+        //연산자 + 현재 값
+        private void CurrentValueOutput(string operatorValue, double currentValue)
         {
-            Window?.SetInputText(currentValue.ToString(outputFormat) + stringValue);
+            Trace.WriteLine($"SetText stringValue: {operatorValue}, currentValue.ToString(OutputFormat): {currentValue.ToString(OutputFormat)}");
+            Window?.CalculatedText(currentValue.ToString(OutputFormat) + operatorValue);
         }
 
         //= 인 경우
-        private void SetEqualText(string lastMark, string stringValue, double beforeValue, double currentValue)
+        private void OutputResult(string lastMark, string stringValue, double beforeValue, double currentValue)
         {
-            Window?.SetInputText(beforeValue.ToString(outputFormat) + lastMark + currentValue.ToString(outputFormat) + stringValue);
+            Window?.CalculatedText(beforeValue.ToString(OutputFormat) + lastMark + currentValue.ToString(OutputFormat) + stringValue);
         }
 
-        public double GetCurrentValue() => currentValue;
+        public double GetCurrentValue() => CurrentValue;
     }
 }
