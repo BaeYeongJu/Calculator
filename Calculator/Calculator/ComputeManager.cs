@@ -12,7 +12,6 @@ namespace Calculator
 
         public double Add(double firstValue, double secondValue)
         {
-            Trace.WriteLine($"Add first: {firstValue} , second: {secondValue}");
             Trace.WriteLine($"Add : {firstValue + secondValue}");
             return firstValue + secondValue;
         }
@@ -39,9 +38,5 @@ namespace Calculator
         public void Reciprocal() { }
         public void SquareRoot() { }
         public void Root() { }
-        public double ReturnComputeFunc(Func<double,double,double> compute, double firstValue, double secondValue)
-        {
-            return compute(firstValue, secondValue);
-        }
     }
 }
