@@ -29,9 +29,9 @@ namespace TestProject
         {
             var manager = new UIManager();
             Assert.AreEqual(CalcData(manager, a, "+", b), int.Parse(a) + int.Parse(b));
-            Assert.AreEqual(CalcData(manager, a, "-", b), int.Parse(a) + int.Parse(b));
-            Assert.AreEqual(CalcData(manager, a, "*", b), int.Parse(a) + int.Parse(b));
-            Assert.AreEqual(CalcData(manager, a, "/", b), int.Parse(a) + int.Parse(b));
+            Assert.AreEqual(CalcData(manager, a, "-", b), int.Parse(a) - int.Parse(b));
+            Assert.AreEqual(CalcData(manager, a, "*", b), int.Parse(a) * int.Parse(b));
+            Assert.AreEqual(CalcData(manager, a, "/", b), int.Parse(a) / int.Parse(b));
         }
 
         private int CalcData(UIManager manager, string a, string operatorString, string b)
