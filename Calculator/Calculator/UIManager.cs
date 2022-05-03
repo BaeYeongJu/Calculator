@@ -18,6 +18,7 @@ namespace Calculator
         private HistoryManager historyManager;
         private ComputeManager computeManager = new ComputeManager();
         private InputManager inputManager;
+        private OutputManager outputManager;
 
         public MainWindow Window { get; set; }
 
@@ -44,6 +45,9 @@ namespace Calculator
 
             inputManager = new InputManager();
             inputManager.uIManager = this;
+
+            outputManager = new OutputManager();
+            outputManager.uIManager = this;
         }
 
         //사칙연산 버튼을 실행
@@ -123,7 +127,7 @@ namespace Calculator
             if (LastOperator == Operator.None)
             {
                 BeforeValue = CurrentValue;
-                DisplayOperatorAndValue(opeartorValue, CurrentValue);
+                outputManager.DisplayOperatorAndValue(opeartorValue, CurrentValue);
 
                 LastOperator = setOperator;
                 lastOperatorMark = lastOperatorValue;
@@ -149,7 +153,7 @@ namespace Calculator
 
             IsEqualClicked = false;
             Window?.SetResultText(CurrentValue.ToString(OutputFormat));
-            DisplayOperatorAndValue(opeartorValue, CurrentValue);
+            outputManager.DisplayOperatorAndValue(opeartorValue, CurrentValue);
             CurrentValue = 0;
         }
 
@@ -159,7 +163,7 @@ namespace Calculator
 
             if (LastOperator == Operator.None)
             {
-                DisplayOperatorAndValue(OperatorButton, CurrentValue);
+                outputManager.DisplayOperatorAndValue(OperatorButton, CurrentValue);
             }
             else
             {
@@ -167,7 +171,7 @@ namespace Calculator
                 if (CurrentValue == 0 && !IsfirstZeroClicked)
                     CurrentValue = BeforeValue;
 
-                DisplayOperatorWithResultAndValue(lastOperatorMark, OperatorButton, BeforeValue, CurrentValue);
+                outputManager.DisplayOperatorWithResultAndValue(lastOperatorMark, OperatorButton, BeforeValue, CurrentValue);
 
                 switch (LastOperator)
                 {
@@ -175,7 +179,7 @@ namespace Calculator
                         if (CurrentValue == 0)
                         {
                             //can't calculate
-                            DisplayZeroValue();
+                            outputManager.DisplayZeroValue();
                             return;
                         }
                         BeforeValue = computeManager.Divide(BeforeValue, CurrentValue);
@@ -191,7 +195,7 @@ namespace Calculator
                         break;
                 }
 
-                DisplayCurrentCalculatedValue();
+                outputManager.DisplayCurrentCalculatedValue();
             }
             IsEqualClicked = true;
         }
@@ -222,33 +226,7 @@ namespace Calculator
 
         public void DisplayInputCurrnetValue() //현재 입력한 값 출력
         {
-            Trace.WriteLine($"DisplayInputCurrnetValue decimalPointCount: {DecimalPointCount}");
-            Window?.SetResultText(string.Format("{0:N" + (DecimalPointCount) + "}", CurrentValue));
-        }
-
-        public void DisplayCurrentCalculatedValue() //현재 계산된 값 출력
-        {
-            Trace.WriteLine($"DisplayCurrentCalculatedValue: {BeforeValue.ToString(OutputFormat)}");
-            Window?.SetResultText(BeforeValue.ToString(OutputFormat));
-        }
-
-        public void DisplayZeroValue() //0인 경우
-        {
-            Window?.SetResultText("0으로 나눌 수 없습니다");
-        }
-
-        //사칙연산 클릭후, 사칙연산 출력 + 현재 값 출력
-        public void DisplayOperatorAndValue(string operatorValue, double currentValue)
-        {
-            Trace.WriteLine($"DisplayOperatorAndValue operatorValue: {operatorValue}, currentValue: {currentValue.ToString(OutputFormat)}");
-            Window?.SetCalculatedText(currentValue.ToString(OutputFormat) + operatorValue);
-        }
-
-        //= 클릭 후, = 출력 & 현재 값 출력
-        public void DisplayOperatorWithResultAndValue(string lastOperator, string operatorValue, double beforeValue, double currentValue)
-        {
-            Trace.WriteLine($"DisplayOperatorWithResultAndValue operatorValue: {operatorValue}, lastMark: {lastOperator}");
-            Window?.SetCalculatedText(beforeValue.ToString(OutputFormat) + lastOperator + currentValue.ToString(OutputFormat) + operatorValue);
+            outputManager.DisplayInputCurrnetValue();
         }
 
         public double GetCurrentValue() => BeforeValue;
