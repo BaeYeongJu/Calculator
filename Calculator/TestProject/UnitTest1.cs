@@ -41,7 +41,7 @@ namespace TestProject
             manager.OperatorButtonClicked(operatorString);
             b.ToCharArray().ToList().ForEach(c => manager.NumberButtonClicked(int.Parse(c.ToString())));
             manager.OperatorButtonClicked("=");
-            return (int)manager.GetCurrentValue();
+            return (int)manager.GetResultValue();
         }
     }
 }
