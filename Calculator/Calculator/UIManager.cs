@@ -30,14 +30,14 @@ namespace Calculator
 
         public MainWindow Window { get; set; }
 
-        public double CurrentValue = 0;
-        public double BeforeValue = 0;
+        public double CurrentValue = 0; //InputManager
+        public double BeforeValue = 0; //InputManager
 
         public int DecimalPointCount = 0; //소수인 경우 count
 
         public Operator LastOperator = Operator.None; //숫자
 
-        public bool IsDecimalPoint = false; //소수 이니?
+        public bool IsDecimalPoint = false; //소수 이니? //InputManager
         public bool IsOperatorClicked = false; //연산자 클릭했니?
         public bool IsNumberClicked = false; //숫자 클릭했니?
         public bool IsEqualClicked = false; //= 클릭했니?
@@ -72,10 +72,10 @@ namespace Calculator
             switch (operatorButton)
             {   
                 case ".":
-                    IsDecimalPoint = true;
+                    //IsDecimalPoint = true;
 
-                    Window?.SetResultText(CurrentValue + ".");
-                    break;
+                    //Window?.SetResultText(CurrentValue + ".");
+                    //break;
                 case "/":
                     if (IsBeforeValueNumber(Operator.Division, "/"))
                         return;
@@ -199,13 +199,13 @@ namespace Calculator
             CurrentValue = 0;
         }
 
-        private void CalculateEqual(string OperatorButton)
+        private void CalculateEqual(string operatorButton)
         {
             IsDecimalPoint = false;
 
             if (LastOperator == Operator.None)
             {
-                outputManager.DisplayOperatorAndValue(OperatorButton, CurrentValue);
+                outputManager.DisplayOperatorAndValue(operatorButton, CurrentValue);
             }
             else
             {
@@ -213,7 +213,7 @@ namespace Calculator
                 if (CurrentValue == 0 && !IsfirstZeroClicked)
                     CurrentValue = BeforeValue;
 
-                outputManager.DisplayOperatorWithResultAndValue(LastOperatorMark, OperatorButton, BeforeValue, CurrentValue);
+                outputManager.DisplayOperatorWithResultAndValue(LastOperatorMark, operatorButton, BeforeValue, CurrentValue);
 
                 switch (LastOperator)
                 {
@@ -261,7 +261,7 @@ namespace Calculator
         }
 
         //숫자 입력
-        public void NumberButtonClicked(int number)
+        public void InputButtonClicked(string value)
         {
             //처음 숫자 클릭한 경우
             if (!IsOperatorClicked && !IsNumberClicked)
@@ -278,7 +278,7 @@ namespace Calculator
                 IsEqualClicked = false;
             }
 
-            inputManager.NumberButtonClicked(number);
+            inputManager.InputButtonClicked(value);
         }
 
         //현재 입력한 값 출력
