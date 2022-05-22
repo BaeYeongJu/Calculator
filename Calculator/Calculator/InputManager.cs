@@ -10,37 +10,46 @@ namespace Calculator
     //입력 관리 (0~9,.)
     public class InputManager
     {
-        public UIManager uIManager { get; set; }
+        public UIManager UiManager { get; set; }
 
         public InputManager(UIManager uiManager)
         {
             Trace.WriteLine("InputManager");
-            uIManager = uiManager;
+            UiManager = uiManager;
         }
 
-        public void NumberButtonClicked(int number)
+        public void InputButtonClicked(string value)
         {
-            if (number == 0)
-                uIManager.IsfirstZeroClicked = true;
+            int number = 0;
 
-            if (!uIManager.IsDecimalPoint)
+            if (value != ".")
+                number = int.Parse(value);
+            
+            if (number == 0)
+                UiManager.IsfirstZeroClicked = true;
+
+            if (value == ".")
             {
-                uIManager.CurrentValue = uIManager.CurrentValue * 10 + number;
+                UiManager.IsDecimalPoint = true;
+                UiManager.Window?.SetResultText(UiManager.CurrentValue + ".");
+                return;
+            }
+                
+            if (!UiManager.IsDecimalPoint)
+            {
+                UiManager.CurrentValue = UiManager.CurrentValue * 10 + number;
             }
             else
             {
-                uIManager.DecimalPointCount++;
-                uIManager.CurrentValue = uIManager.CurrentValue + Math.Pow(10, -1 * uIManager.DecimalPointCount) * number;
+                UiManager.DecimalPointCount++;
+                UiManager.CurrentValue = UiManager.CurrentValue + Math.Pow(10, -1 * UiManager.DecimalPointCount) * number;
+                Trace.WriteLine($"Math pow: {Math.Pow(10, -1 * UiManager.DecimalPointCount)}");
             }
-            uIManager.DisplayInputCurrnetValue();
-            Trace.WriteLine($"num currentValue: {uIManager.CurrentValue} , num beforeValue: {uIManager.BeforeValue}");
-        }
 
-        public void DecimalPointButtonClicked(string demicalPointButton)
-        {
-            uIManager.IsDecimalPoint = true;
+            if (value != ".")
+                UiManager.DisplayInputCurrnetValue();
 
-            uIManager.Window?.SetResultText(uIManager.CurrentValue + ".");
+            Trace.WriteLine($"2 InputButtonClicked currentValue: {UiManager.CurrentValue}");
         }
 
     }
