@@ -22,7 +22,7 @@ namespace Calculator
     public partial class MainWindow : Window
     {
         private UIManager uiManager;
-        private Dictionary<Button, int> numberButtonDictionary = new Dictionary<Button, int>();
+        private Dictionary<Button, string> InputButtonDictionary = new Dictionary<Button, string>();
         private Dictionary<Button, string> operatorButtonDictionary = new Dictionary<Button, string>();
         public Button ClickedButton = null;
         public MainWindow()
@@ -31,23 +31,23 @@ namespace Calculator
             uiManager = new UIManager();
             uiManager.Window = this;
 
-            numberButtonDictionary.Add(ZeroButton, 0);
-            numberButtonDictionary.Add(OneButton, 1);
-            numberButtonDictionary.Add(TwoButton, 2);
-            numberButtonDictionary.Add(ThreeButton, 3);
-            numberButtonDictionary.Add(FourButton, 4);
-            numberButtonDictionary.Add(FiveButton, 5);
-            numberButtonDictionary.Add(SixButton, 6);
-            numberButtonDictionary.Add(SevenButton, 7);
-            numberButtonDictionary.Add(EigthtButton, 8);
-            numberButtonDictionary.Add(NineButton, 9);
+            InputButtonDictionary.Add(ZeroButton, "0");
+            InputButtonDictionary.Add(OneButton, "1");
+            InputButtonDictionary.Add(TwoButton, "2");
+            InputButtonDictionary.Add(ThreeButton, "3");
+            InputButtonDictionary.Add(FourButton, "4");
+            InputButtonDictionary.Add(FiveButton, "5");
+            InputButtonDictionary.Add(SixButton, "6");
+            InputButtonDictionary.Add(SevenButton, "7");
+            InputButtonDictionary.Add(EigthtButton, "8");
+            InputButtonDictionary.Add(NineButton, "9");
+            InputButtonDictionary.Add(DecimalPointButton, ".");
 
             operatorButtonDictionary.Add(DivideButton, "/");
             operatorButtonDictionary.Add(MultiplyButton, "*");
             operatorButtonDictionary.Add(SubtractButton, "-");
             operatorButtonDictionary.Add(AddButton, "+");
             operatorButtonDictionary.Add(EqualButton, "=");
-            operatorButtonDictionary.Add(DecimalPointButton, ".");
             operatorButtonDictionary.Add(Negate, "+/-");
             operatorButtonDictionary.Add(ClearButton, "C");
             operatorButtonDictionary.Add(ClearAllButton, "CE");
@@ -70,12 +70,12 @@ namespace Calculator
             ClickedButton = button;
         }
 
-        private void ButtonNumberClick(object sender, RoutedEventArgs e)
+        private void InputButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             if (button == null)
                 MessageBox.Show("ButtonNumberClick null");
-            uiManager.NumberButtonClicked(numberButtonDictionary[button]);
+            uiManager.InputButtonClicked(InputButtonDictionary[button]);
         }
 
         public void SetResultText(string data)
