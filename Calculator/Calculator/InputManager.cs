@@ -7,36 +7,21 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    //입력 관련
+    //입력 관리 (0~9,.)
     public class InputManager
     {
         public UIManager uIManager { get; set; }
 
-        public InputManager()
+        public InputManager(UIManager uiManager)
         {
             Trace.WriteLine("InputManager");
+            uIManager = uiManager;
         }
 
         public void NumberButtonClicked(int number)
         {
-
-            //처음 숫자 클릭한 경우
-            if (!uIManager.IsOperatorClicked && !uIManager.IsNumberClicked)
-                uIManager.IsNumberClicked = true;
-
-            //+,= 연산자 둘다 사용시에
-            if (uIManager.lastOperator == Operator.Plus && uIManager.IsEqualClicked)
-                uIManager.Clear();
-
             if (number == 0)
                 uIManager.IsfirstZeroClicked = true;
-
-            //= 연산자 사용시에
-            if (uIManager.IsEqualClicked)
-            {
-                uIManager.CurrentValue = 0;
-                uIManager.IsEqualClicked = false;
-            }
 
             if (!uIManager.IsDecimalPoint)
             {
@@ -47,8 +32,16 @@ namespace Calculator
                 uIManager.DecimalPointCount++;
                 uIManager.CurrentValue = uIManager.CurrentValue + Math.Pow(10, -1 * uIManager.DecimalPointCount) * number;
             }
-            uIManager.Input();
+            uIManager.DisplayInputCurrnetValue();
             Trace.WriteLine($"num currentValue: {uIManager.CurrentValue} , num beforeValue: {uIManager.BeforeValue}");
         }
+
+        public void DecimalPointButtonClicked(string demicalPointButton)
+        {
+            uIManager.IsDecimalPoint = true;
+
+            uIManager.Window?.SetResultText(uIManager.CurrentValue + ".");
+        }
+
     }
 }
