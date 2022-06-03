@@ -65,7 +65,7 @@ namespace Calculator
         {
             Button button = sender as Button;
             if (button == null)
-                MessageBox.Show("ButtonNumberClick null");
+                MessageBox.Show("OperatorButtonClick null");
             uiManager.OperatorButtonClicked(operatorButtonDictionary[button]);
             ClickedButton = button;
         }
@@ -74,7 +74,7 @@ namespace Calculator
         {
             Button button = sender as Button;
             if (button == null)
-                MessageBox.Show("ButtonNumberClick null");
+                MessageBox.Show("InputButtonClick null");
             uiManager.InputButtonClicked(InputButtonDictionary[button]);
         }
 
