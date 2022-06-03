@@ -15,7 +15,7 @@ namespace Calculator
 
     public class UIManager
     {
-        private Dictionary<Operator, string> OperatorString = new Dictionary<Operator, string>() {
+        private Dictionary<Operator, string> operatorString = new Dictionary<Operator, string>() {
             { Operator.None,"StrEmpty" },
             { Operator.Division,"/" },
             { Operator.Plus,"+" },
@@ -37,16 +37,13 @@ namespace Calculator
 
         public Operator LastOperator = Operator.None; //숫자
 
-        public bool IsDecimalPoint = false; //소수 이니? //InputManager
         public bool IsOperatorClicked = false; //연산자 클릭했니?
         public bool IsNumberClicked = false; //숫자 클릭했니?
         public bool IsEqualClicked = false; //= 클릭했니?
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-        public bool IsfirstZeroClicked = false; // ex)0/2
+        public bool IsfirstZeroClicked = false; // ex)0/2 //InputManager
 
-        public string OutputFormat = "0.#################";
         public string LastOperatorMark = string.Empty;
-        private string displayNegate = $"negate({0})";
         private string negate = "negate(0)";
 
         public UIManager()
@@ -66,16 +63,11 @@ namespace Calculator
 
             if (operatorButton != ".")
             {
-                IsDecimalPoint = false;
+                inputManager.IsDecimalPoint = false;
                 DecimalPointCount = 0;
             }
             switch (operatorButton)
             {   
-                case ".":
-                    //IsDecimalPoint = true;
-
-                    //Window?.SetResultText(CurrentValue + ".");
-                    //break;
                 case "/":
                     if (IsBeforeValueNumber(Operator.Division, "/"))
                         return;
@@ -172,7 +164,7 @@ namespace Calculator
 
                 LastOperator = operatorSymbol;
                 
-                LastOperatorMark = OperatorString[LastOperator];
+                LastOperatorMark = operatorString[LastOperator];
                 CurrentValue = 0;
                 IsEqualClicked = false;
                 return true;
@@ -193,15 +185,15 @@ namespace Calculator
                 BeforeValue = CurrentValue;
             }
 
-            IsEqualClicked = false;
-            Window?.SetResultText(CurrentValue.ToString(OutputFormat));
+            IsEqualClicked = false; 
+            SetResultText(CurrentValue.ToString(outputManager.OutputFormat));
             outputManager.DisplayOperatorAndValue(opeartorValue, CurrentValue);
             CurrentValue = 0;
         }
 
         private void CalculateEqual(string operatorButton)
         {
-            IsDecimalPoint = false;
+            inputManager.IsDecimalPoint = false;
 
             if (LastOperator == Operator.None)
             {
@@ -244,14 +236,14 @@ namespace Calculator
 
         public void Clear()
         {
-            IsDecimalPoint = false;
+            inputManager.IsDecimalPoint = false;
             DecimalPointCount = 0;
             IsOperatorClicked = false;
             IsNumberClicked = false;
             CurrentValue = 0;
             BeforeValue = 0;
-            Window?.SetCalculatedText(string.Empty);
-            Window?.SetResultText("0");
+            outputManager.DisplayEmpty();
+            SetResultText("0");
             LastOperator = Operator.None;
             IsEqualClicked = false;
             LastOperatorMark = string.Empty;
@@ -289,5 +281,9 @@ namespace Calculator
 
         //결과의 값을 반환
         public double GetResultValue() => BeforeValue;
+
+        public void SetResultText(string data) => Window?.SetResultText(data);
+        public void SetCalculatedText(string data) => Window?.SetCalculatedText(data);
+
     }
 }
