@@ -12,6 +12,10 @@ namespace Calculator
     {
         public UIManager UiManager { get; set; }
 
+        private string displayNegate = $"negate({0})";
+
+        public string OutputFormat = "0.#################";
+
         public OutputManager(UIManager uiManager)
         {
             Trace.WriteLine("OutputManager");
@@ -21,42 +25,47 @@ namespace Calculator
         public void DisplayInputCurrnetValue() //현재 입력한 값 출력
         {
             Trace.WriteLine($"DisplayInputCurrnetValue decimalPointCount: {UiManager.DecimalPointCount}");
-            UiManager.Window?.SetResultText(string.Format("{0:N" + (UiManager.DecimalPointCount) + "}", UiManager.CurrentValue));
+            UiManager.SetResultText(string.Format("{0:N" + (UiManager.DecimalPointCount) + "}", UiManager.CurrentValue));
         }
 
         public void DisplayCurrentCalculatedValue() //현재 계산된 값 출력
         {
-            Trace.WriteLine($"DisplayCurrentCalculatedValue: {UiManager.BeforeValue.ToString(UiManager.OutputFormat)}");
-            UiManager.Window?.SetResultText(UiManager.BeforeValue.ToString(UiManager.OutputFormat));
+            Trace.WriteLine($"DisplayCurrentCalculatedValue: {UiManager.BeforeValue.ToString(OutputFormat)}");
+            UiManager.SetResultText(UiManager.BeforeValue.ToString(OutputFormat));
         }
 
         public void DisplayZeroValue() //0인 경우 출력
         {
-            UiManager.Window?.SetResultText("정의되지 않는 결과입니다.");
+            UiManager.SetResultText("정의되지 않는 결과입니다.");
         }
 
         public void DisplayNegate() //0인 경우, +/- 클릭시 출력
         {
-            UiManager.Window?.SetCalculatedText("negate");
+            UiManager.SetCalculatedText("negate");
         }
 
         //사칙연산 클릭후, 사칙연산 출력 + 현재 값 출력
         public void DisplayOperatorAndValue(string operatorValue, double currentValue)
         {
-            Trace.WriteLine($"DisplayOperatorAndValue operatorValue: {operatorValue}, currentValue: {currentValue.ToString(UiManager.OutputFormat)}");
-            UiManager.Window?.SetCalculatedText(currentValue.ToString(UiManager.OutputFormat) + operatorValue);
+            Trace.WriteLine($"DisplayOperatorAndValue operatorValue: {operatorValue}, currentValue: {currentValue.ToString(OutputFormat)}");
+            UiManager.SetCalculatedText(currentValue.ToString(OutputFormat) + operatorValue);
         }
 
         //= 클릭 후, = 출력 & 현재 값 출력
         public void DisplayOperatorWithResultAndValue(string lastOperator, string operatorValue, double beforeValue, double currentValue)
         {
             Trace.WriteLine($"DisplayOperatorWithResultAndValue operatorValue: {operatorValue}, lastMark: {lastOperator}");
-            UiManager.Window?.SetCalculatedText(beforeValue.ToString(UiManager.OutputFormat) + lastOperator + currentValue.ToString(UiManager.OutputFormat) + operatorValue);
+            UiManager.SetCalculatedText(beforeValue.ToString(OutputFormat) + lastOperator + currentValue.ToString(OutputFormat) + operatorValue);
         }
 
         public void DisplayDecimalPointValue(double value)
         {
-            UiManager.Window?.SetResultText(value + ".");
+            UiManager.SetResultText(value + ".");
+        }
+
+        public void DisplayEmpty()
+        {
+            UiManager.SetResultText(string.Empty);
         }
     }
 }

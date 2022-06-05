@@ -12,6 +12,8 @@ namespace Calculator
     {
         public UIManager UiManager { get; set; }
 
+        public bool IsDecimalPoint = false;//소수 이니?
+
         public InputManager(UIManager uiManager)
         {
             Trace.WriteLine("InputManager");
@@ -30,12 +32,12 @@ namespace Calculator
 
             if (value == ".")
             {
-                UiManager.IsDecimalPoint = true;
-                UiManager.Window?.SetResultText(UiManager.CurrentValue + ".");
+                IsDecimalPoint = true;
+                UiManager.SetResultText(UiManager.CurrentValue + ".");
                 return;
             }
                 
-            if (!UiManager.IsDecimalPoint)
+            if (!IsDecimalPoint)
             {
                 UiManager.CurrentValue = UiManager.CurrentValue * 10 + number;
             }
