@@ -30,21 +30,16 @@ namespace Calculator
 
         public MainWindow Window { get; set; }
 
-        public double CurrentValue = 0; //InputManager
-        public double BeforeValue = 0; //InputManager
-
         public int DecimalPointCount = 0; //소수인 경우 count
 
         public Operator LastOperator = Operator.None; //숫자
 
-        public bool IsOperatorClicked = false; //연산자 클릭했니?
-        public bool IsNumberClicked = false; //숫자 클릭했니?
-        public bool IsEqualClicked = false; //= 클릭했니?
+        public bool IsOperatorClicked = false; //연산자 클릭했니? //연산자
+        public bool IsNumberClicked = false; //숫자 클릭했니? //InputManager 에서 관리?
+        public bool IsEqualClicked = false; //= 클릭했니? //연산자
         private bool isFunctionClicked = false; //function 기능 클릭했니?
-        public bool IsfirstZeroClicked = false; // ex)0/2 //InputManager
 
         public string LastOperatorMark = string.Empty;
-        private string negate = "negate(0)";
 
         public UIManager()
         {
@@ -76,14 +71,14 @@ namespace Calculator
                     LastOperatorMark = "/";
 
                     //+ 입력 > = 입력 > / 입력시 처리
-                    if (IsEqualClicked && CurrentValue == 0)
+                    if (IsEqualClicked && inputManager.CurrentValue == 0)
                     {
-                        outputManager.DisplayOperatorAndValue(LastOperatorMark, CurrentValue);
+                        outputManager.DisplayOperatorAndValue(LastOperatorMark, inputManager.CurrentValue);
                         outputManager.DisplayZeroValue();
                         return;
                     }
 
-                    CalculateOperation(operatorButton, computeManager.Divide(BeforeValue, CurrentValue));
+                    CalculateOperation(operatorButton, computeManager.Divide(inputManager.BeforeValue, inputManager.CurrentValue));
                     break;
                 case "*":
                     if (IsBeforeValueNumber(Operator.Multiply, "*"))
@@ -92,7 +87,7 @@ namespace Calculator
                     LastOperator = Operator.Multiply;
                     LastOperatorMark = "*";
 
-                    CalculateOperation(operatorButton, computeManager.Multiply(BeforeValue, CurrentValue));
+                    CalculateOperation(operatorButton, computeManager.Multiply(inputManager.BeforeValue, inputManager.CurrentValue));
                     break;
                 case "-":
                     if (IsBeforeValueNumber(Operator.Minus, "-"))
@@ -101,13 +96,13 @@ namespace Calculator
                     LastOperator = Operator.Minus;
                     LastOperatorMark = "-";
 
-                    CalculateOperation(operatorButton, computeManager.Subtract(BeforeValue, CurrentValue));
+                    CalculateOperation(operatorButton, computeManager.Subtract(inputManager.BeforeValue, inputManager.CurrentValue));
                     break;
                 case "+":
                     LastOperator = Operator.Plus;
                     LastOperatorMark = "+";
 
-                    CalculateOperation(operatorButton, computeManager.Add(BeforeValue, CurrentValue));
+                    CalculateOperation(operatorButton, computeManager.Add(inputManager.BeforeValue, inputManager.CurrentValue));
                     break;
                 case "=":
 
@@ -123,7 +118,7 @@ namespace Calculator
                     1번 클릭 : negate(0)
                     2번 클릭 : negate(negate(0))
 
-                    if(LastOperator == Operator.None && CurrentValue == 0)
+                    if(LastOperator == Operator.None && inputManager.CurrentValue == 0)
                     {
                         //Trace.WriteLine($"Negate :{decimal.Negate(0)}");
                         //Window?.SetResultText("정의되지 않는 결과입니다.");
@@ -132,7 +127,7 @@ namespace Calculator
                     }
                   
                     //숫자 입력후
-                    CurrentValue *= -1;
+                    inputManager.CurrentValue *= -1;
                     DisplayInputCurrnetValue();
                     */
 
@@ -158,14 +153,14 @@ namespace Calculator
         public bool IsBeforeValueNumber(Operator operatorSymbol, string opeartorValue)
         {
             if (LastOperator == Operator.None) //숫자를 의미
-            { 
-                BeforeValue = CurrentValue; //값 대입
-                outputManager.DisplayOperatorAndValue(opeartorValue, CurrentValue); //값 출력
+            {
+                inputManager.BeforeValue = inputManager.CurrentValue; //값 대입
+                outputManager.DisplayOperatorAndValue(opeartorValue, inputManager.CurrentValue); //값 출력
 
                 LastOperator = operatorSymbol;
                 
                 LastOperatorMark = operatorString[LastOperator];
-                CurrentValue = 0;
+                inputManager.CurrentValue = 0;
                 IsEqualClicked = false;
                 return true;
             }
@@ -175,20 +170,20 @@ namespace Calculator
         private void CalculateOperation(string opeartorValue, double calculatedValue)
         {
             //== double 클릭, 기존 값이 0이 아닌 경우 
-            if (Window?.ClickedButton == Window?.EqualButton && BeforeValue != 0)
+            if (Window?.ClickedButton == Window?.EqualButton && inputManager.BeforeValue != 0)
             {
-                CurrentValue = BeforeValue;
+                inputManager.CurrentValue = inputManager.BeforeValue;
             }
             else
             {
-                CurrentValue = calculatedValue;
-                BeforeValue = CurrentValue;
+                inputManager.CurrentValue = calculatedValue;
+                inputManager.BeforeValue = inputManager.CurrentValue;
             }
 
             IsEqualClicked = false; 
-            SetResultText(CurrentValue.ToString(outputManager.OutputFormat));
-            outputManager.DisplayOperatorAndValue(opeartorValue, CurrentValue);
-            CurrentValue = 0;
+            SetResultText(inputManager.CurrentValue.ToString(outputManager.OutputFormat));
+            outputManager.DisplayOperatorAndValue(opeartorValue, inputManager.CurrentValue);
+            inputManager.CurrentValue = 0;
         }
 
         private void CalculateEqual(string operatorButton)
@@ -197,35 +192,35 @@ namespace Calculator
 
             if (LastOperator == Operator.None)
             {
-                outputManager.DisplayOperatorAndValue(operatorButton, CurrentValue);
+                outputManager.DisplayOperatorAndValue(operatorButton, inputManager.CurrentValue);
             }
             else
             {
                 //= 클릭한 상태 
-                if (CurrentValue == 0 && !IsfirstZeroClicked)
-                    CurrentValue = BeforeValue;
+                if (inputManager.CurrentValue == 0 && !inputManager.IsfirstZeroClicked)
+                    inputManager.CurrentValue = inputManager.BeforeValue;
 
-                outputManager.DisplayOperatorWithResultAndValue(LastOperatorMark, operatorButton, BeforeValue, CurrentValue);
+                outputManager.DisplayOperatorWithResultAndValue(LastOperatorMark, operatorButton, inputManager.BeforeValue, inputManager.CurrentValue);
 
                 switch (LastOperator)
                 {
                     case Operator.Division:
-                        if (CurrentValue == 0)
+                        if (inputManager.CurrentValue == 0)
                         {
                             //can't calculate
                             outputManager.DisplayZeroValue();
                             return;
                         }
-                        BeforeValue = computeManager.Divide(BeforeValue, CurrentValue);
+                        inputManager.BeforeValue = computeManager.Divide(inputManager.BeforeValue, inputManager.CurrentValue);
                         break;
                     case Operator.Plus:
-                        BeforeValue = computeManager.Add(BeforeValue, CurrentValue);
+                        inputManager.BeforeValue = computeManager.Add(inputManager.BeforeValue, inputManager.CurrentValue);
                         break;
                     case Operator.Minus:
-                        BeforeValue = computeManager.Subtract(BeforeValue, CurrentValue);
+                        inputManager.BeforeValue = computeManager.Subtract(inputManager.BeforeValue, inputManager.CurrentValue);
                         break;
                     case Operator.Multiply:
-                        BeforeValue = computeManager.Multiply(BeforeValue, CurrentValue);
+                        inputManager.BeforeValue = computeManager.Multiply(inputManager.BeforeValue, inputManager.CurrentValue);
                         break;
                 }
 
@@ -234,20 +229,20 @@ namespace Calculator
             IsEqualClicked = true;
         }
 
-        public void Clear()
+        public void Clear() //초기화 기능 -> ComputeManager Class 에서 처리
         {
             inputManager.IsDecimalPoint = false;
             DecimalPointCount = 0;
             IsOperatorClicked = false;
             IsNumberClicked = false;
-            CurrentValue = 0;
-            BeforeValue = 0;
+            inputManager.CurrentValue = 0;
+            inputManager.BeforeValue = 0;
             outputManager.DisplayEmpty();
             SetResultText("0");
             LastOperator = Operator.None;
             IsEqualClicked = false;
             LastOperatorMark = string.Empty;
-            IsfirstZeroClicked = false;
+            inputManager.IsfirstZeroClicked = false;
             if (Window?.ClickedButton != null)
                 Window.ClickedButton = null;
         }
@@ -266,7 +261,7 @@ namespace Calculator
             //= 연산자 사용시에
             if (IsEqualClicked)
             {
-                CurrentValue = 0;
+                inputManager.CurrentValue = 0;
                 IsEqualClicked = false;
             }
 
@@ -280,10 +275,11 @@ namespace Calculator
         }
 
         //결과의 값을 반환
-        public double GetResultValue() => BeforeValue;
+        public double GetResultValue() => inputManager.BeforeValue;
 
         public void SetResultText(string data) => Window?.SetResultText(data);
         public void SetCalculatedText(string data) => Window?.SetCalculatedText(data);
 
+        public double CurrentValue() => inputManager.CurrentValue;
     }
 }
