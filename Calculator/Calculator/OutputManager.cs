@@ -13,7 +13,6 @@ namespace Calculator
         public UIManager UiManager { get; set; }
 
         private string displayNegate = $"negate({0})";
-        private string negate = "negate(0)";
 
         public string OutputFormat = "0.#################";
 
@@ -64,9 +63,10 @@ namespace Calculator
             UiManager.SetResultText(value + ".");
         }
 
-        public void DisplayEmpty()
+        public void Clear()
         {
             UiManager.SetResultText(string.Empty);
+            UiManager.SetResultText("0");
         }
     }
 }

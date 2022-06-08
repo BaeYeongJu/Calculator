@@ -25,6 +25,14 @@ namespace Calculator
             UiManager = uiManager;
         }
 
+        public void Clear()
+        {
+            IsDecimalPoint = false;
+            CurrentValue = 0;
+            BeforeValue = 0;
+            IsfirstZeroClicked = false;
+        }
+
         public void InputButtonClicked(string value)
         {
             int number = 0;

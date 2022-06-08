@@ -229,20 +229,18 @@ namespace Calculator
             IsEqualClicked = true;
         }
 
-        public void Clear() //초기화 기능 -> ComputeManager Class 에서 처리
+        //각자 초기화 기능을 가지고 있다가 호출.
+        public void Clear() //초기화 기능
         {
-            inputManager.IsDecimalPoint = false;
+            inputManager.Clear();
+            outputManager.Clear();
+
             DecimalPointCount = 0;
             IsOperatorClicked = false;
             IsNumberClicked = false;
-            inputManager.CurrentValue = 0;
-            inputManager.BeforeValue = 0;
-            outputManager.DisplayEmpty();
-            SetResultText("0");
             LastOperator = Operator.None;
             IsEqualClicked = false;
             LastOperatorMark = string.Empty;
-            inputManager.IsfirstZeroClicked = false;
             if (Window?.ClickedButton != null)
                 Window.ClickedButton = null;
         }
