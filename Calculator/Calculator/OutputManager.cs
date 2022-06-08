@@ -13,6 +13,7 @@ namespace Calculator
         public UIManager UiManager { get; set; }
 
         private string displayNegate = $"negate({0})";
+        private string negate = "negate(0)";
 
         public string OutputFormat = "0.#################";
 
@@ -25,13 +26,13 @@ namespace Calculator
         public void DisplayInputCurrnetValue() //현재 입력한 값 출력
         {
             Trace.WriteLine($"DisplayInputCurrnetValue decimalPointCount: {UiManager.DecimalPointCount}");
-            UiManager.SetResultText(string.Format("{0:N" + (UiManager.DecimalPointCount) + "}", UiManager.CurrentValue));
+            UiManager.SetResultText(string.Format("{0:N" + (UiManager.DecimalPointCount) + "}", UiManager.CurrentValue()));
         }
 
         public void DisplayCurrentCalculatedValue() //현재 계산된 값 출력
         {
-            Trace.WriteLine($"DisplayCurrentCalculatedValue: {UiManager.BeforeValue.ToString(OutputFormat)}");
-            UiManager.SetResultText(UiManager.BeforeValue.ToString(OutputFormat));
+            Trace.WriteLine($"DisplayCurrentCalculatedValue: {UiManager.GetResultValue().ToString(OutputFormat)}");
+            UiManager.SetResultText(UiManager.GetResultValue().ToString(OutputFormat));
         }
 
         public void DisplayZeroValue() //0인 경우 출력

@@ -54,13 +54,6 @@ namespace Calculator
             operatorButtonDictionary.Add(DeleteButton, "Delete");
         }
 
-        private void ButtonClick(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            if(button != null)
-                MessageBox.Show($"{button.Name} Click");
-        }
-
         private void OperatorButtonClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;

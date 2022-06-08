@@ -12,7 +12,12 @@ namespace Calculator
     {
         public UIManager UiManager { get; set; }
 
-        public bool IsDecimalPoint = false;//소수 이니?
+        public bool IsDecimalPoint = false; //소수 이니?
+
+        public double CurrentValue = 0;
+        public double BeforeValue = 0;
+
+        public bool IsfirstZeroClicked = false; //ex)0/2 , 0인지 체크
 
         public InputManager(UIManager uiManager)
         {
@@ -28,30 +33,30 @@ namespace Calculator
                 number = int.Parse(value);
             
             if (number == 0)
-                UiManager.IsfirstZeroClicked = true;
+                IsfirstZeroClicked = true;
 
             if (value == ".")
             {
                 IsDecimalPoint = true;
-                UiManager.SetResultText(UiManager.CurrentValue + ".");
+                UiManager.SetResultText(CurrentValue + ".");
                 return;
             }
                 
             if (!IsDecimalPoint)
             {
-                UiManager.CurrentValue = UiManager.CurrentValue * 10 + number;
+                CurrentValue = CurrentValue * 10 + number;
             }
             else
             {
                 UiManager.DecimalPointCount++;
-                UiManager.CurrentValue = UiManager.CurrentValue + Math.Pow(10, -1 * UiManager.DecimalPointCount) * number;
+                CurrentValue = CurrentValue + Math.Pow(10, -1 * UiManager.DecimalPointCount) * number;
                 Trace.WriteLine($"Math pow: {Math.Pow(10, -1 * UiManager.DecimalPointCount)}");
             }
 
             if (value != ".")
                 UiManager.DisplayInputCurrnetValue();
 
-            Trace.WriteLine($"2 InputButtonClicked currentValue: {UiManager.CurrentValue}");
+            Trace.WriteLine($"2 InputButtonClicked currentValue: {CurrentValue}");
         }
 
     }
