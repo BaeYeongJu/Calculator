@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Calculator;
 using System.Linq;
+using System.Diagnostics;
 
 namespace TestProject
 {
@@ -37,9 +38,9 @@ namespace TestProject
         private int CalcData(UIManager manager, string a, string operatorString, string b)
         {
             manager.OperatorButtonClicked("C");
-            a.ToCharArray().ToList().ForEach(c => manager.NumberButtonClicked(int.Parse(c.ToString())));
+            a.ToCharArray().ToList().ForEach(c => manager.InputButtonClicked(c.ToString()));
             manager.OperatorButtonClicked(operatorString);
-            b.ToCharArray().ToList().ForEach(c => manager.NumberButtonClicked(int.Parse(c.ToString())));
+            b.ToCharArray().ToList().ForEach(c => manager.InputButtonClicked(c.ToString()));
             manager.OperatorButtonClicked("=");
             return (int)manager.GetResultValue();
         }
