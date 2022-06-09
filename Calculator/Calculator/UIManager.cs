@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace Calculator
 {
     public enum Operator
@@ -38,6 +40,8 @@ namespace Calculator
         public bool IsNumberClicked = false; //숫자 클릭했니? //InputManager 에서 관리?
         public bool IsEqualClicked = false; //= 클릭했니? //연산자
         private bool isFunctionClicked = false; //function 기능 클릭했니?
+        private bool isPlusMinusClicked = false;
+        private int plusMinusCount = 0;
 
         public string LastOperatorMark = string.Empty;
 
@@ -112,7 +116,7 @@ namespace Calculator
                     Clear();
                     break;
                 case "+/-":
-                    
+
                     /* 임시..
                     //negate() 문자열
                     1번 클릭 : negate(0)
@@ -130,7 +134,13 @@ namespace Calculator
                     inputManager.CurrentValue *= -1;
                     DisplayInputCurrnetValue();
                     */
+                    isPlusMinusClicked = true;
 
+                    if (isPlusMinusClicked)
+                    {
+                        plusMinusCount++;
+                    }
+                    TestFunc(plusMinusCount);
                     break;
                 case "CE":
                     break;
@@ -140,6 +150,13 @@ namespace Calculator
             }
 
             Trace.WriteLine($"isOperatorClicked:{IsOperatorClicked} ,isNumberClicked:{IsNumberClicked}");
+        }
+
+        //숫자만큼 값을 호출하면 됨.
+        private void TestFunc(int num)
+        {
+            string showText = string.Concat(Enumerable.Repeat("x()", num));
+            Trace.WriteLine(showText);
         }
 
         public string GetOperatorString(Operator symbol)
